@@ -1,0 +1,26 @@
+// CUSTOM BOOTSTRAP
+$card-border-radius: 20px;
+
+// fonts website
+$font-family-base: "Manrope", sans-serif;
+
+.anton {
+  font-family: "Anton", sans-serif;
+  letter-spacing: 1px;
+}
+
+// other global custom
+.global_container {
+  max-width: 1920px;
+  height: 100vh;
+  margin: 0 auto;
+}
+
+img {
+  object-position: center;
+  object-fit: cover;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

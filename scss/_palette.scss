@@ -1,0 +1,25 @@
+// colors custom
+$white: #ffffff;
+$lightGrey: #ededed;
+$darkGrey: #7a7a7a;
+$dark: #1b1b1b;
+$yellow: #ffd15b;
+
+$custom-theme-colors: (
+  "white": $white,
+  "lightGrey": $lightGrey,
+  "darkGrey": $darkGrey,
+  "dark": $dark,
+  "yellow": $yellow,
+);
+
+$theme-colors: map-merge($custom-theme-colors, $theme-colors);
+
+@each $key, $val in $custom-theme-colors {
+  .bg-#{$key} {
+    background-color: $val;
+  }
+  .text-#{$key} {
+    color: $val;
+  }
+}
