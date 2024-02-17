@@ -22,9 +22,9 @@
 
         <div class="position-relative w-100 h-100 d-flex flex-column space-between ">
             <img src="assets/logo.svg" alt="Les petits plats" class="p-4 pb-5 w-25">
-            <h1 class="title_w  text-yellow text-center text-uppercase lh-sm fw-bold anton">
-                Cherchez plus de 1500 recettes du quotidien, simples et délicieuses </h1>
-            <div class="input-group w-75 mx-auto p-1">
+            <h1 class="title_w anton text-yellow text-center text-uppercase lh-base fw-bold">
+                Cherchez parmi plus de 1500 recettes <br /> du quotidien, simples et délicieuses </h1>
+            <div class="search_input input-group mx-auto p-1">
                 <input type="text" class="form-control ps-3 " placeholder="Recherchez une recette, un ingrédient, ...">
                 <img class="input-group-text bg-white" src="assets/loupe.svg"></img>
             </div>
@@ -39,12 +39,13 @@
                     Ingrédients
                 </button>
 
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" href="#">Jus de citron</a></li>
+                <ul id="list1" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <!-- <li><a class="dropdown-item" href="#">Jus de citron</a></li>
                     <li><a class="dropdown-item" href="#">Glaçons</a></li>
-                    <li><a class="dropdown-item" href="#">Tomate</a></li>
+                    <li><a class="dropdown-item" href="#">Tomate</a></li> -->
                 </ul>
             </div>
+
             <div class="dropdown col-2">
                 <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton2"
                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -74,7 +75,7 @@
 
         </div>
         <section id="recipe"
-            class="container row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 d-flex justify-content-center mx-auto">
+            class="container row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 d-flex justify-content-center mx-auto my-3">
         </section>
     </main>
 
@@ -84,8 +85,10 @@
 
     <!-- MODELS -->
     <script src="./models/RecipesData.js"></script>
+    <script src="./models/FilterMethod.js"></script>
     <!-- TEMPLATES -->
     <script src="./template/RecipeCard.js"></script>
+    <script src="./template/List.js"></script>
     <!-- API -->
     <script src="./api/ApiRecipes.js"></script>
     <!-- ENTRY POINT -->

@@ -10,6 +10,10 @@
   margin: 0 auto;
 }
 
+li {
+  list-style: none;
+}
+
 img {
   object-position: center;
   object-fit: cover;
@@ -61,8 +65,12 @@ img {
 
 .title_w {
   max-width: 70vw;
-  margin: 0 auto;
+  margin: 100px auto 50px auto;
   letter-spacing: 1.5px;
+}
+
+.search_input {
+  max-width: 60%;
 }
 
 .imgRecipe {
@@ -70,14 +78,21 @@ img {
   border-radius: 20px 20px 0 0;
 }
 
-#recipe {
-  height: 50px;
+#recipe_details {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 10px 0;
 }
 
-#recipe_details {
-  height: 150px;
-  border: 1px solid blue;
-  text-overflow: ellipsis;
+#recipe_ingredients {
+  list-style-type: none;
+  padding: 10px 0;
+}
+#recipe_ingredients .ingredient {
+  font-weight: 500;
+  line-height: 2;
 }
 
 /*!

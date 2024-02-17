@@ -15,7 +15,9 @@ $font-family-base: "Manrope", sans-serif;
   height: 100vh;
   margin: 0 auto;
 }
-
+li {
+  list-style: none;
+}
 img {
   object-position: center;
   object-fit: cover;
