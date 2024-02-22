@@ -7,19 +7,16 @@
  * Display each ingredient qty of the recipe 🟥
  */
 class RecipeCard {
-  constructor(recipe, ingredientsList, qtyList) {
+  constructor(recipe, ingredientsAndQtyList) {
     this.recipe = recipe;
-    this.ingredientsList = ingredientsList;
-    this.qtyList = qtyList;
+    this.ingredientsAndQtyList = ingredientsAndQtyList;
+
     // console.log(this);
   }
 
+  // Create card
   createRecipeCard() {
-    this.ingredient = this.ingredientsList.forEach((ingredient) => {
-      // console.log(ingredient);
-    });
-    // 🟥 doesn't work
-    // console.log(this.ingredient);
+    // console.log(this);
 
     const $wrapper = document.createElement("div");
     $wrapper.className = "col";
@@ -35,15 +32,22 @@ class RecipeCard {
       </div>
       <span class="ingredients card-text fs-6">INGREDIENTS</span>
       <ul id="recipe_ingredients">
-        <li class="ingredient">${this.ingredient}</li>
-        <li class="ingredient_qty">${this.qtyList}</li>
+     
       </ul>
+     
     </div>
     </div>
     `;
 
-    $wrapper.innerHTML = recipeCard;
+    let details = document.querySelector("#recipe_ingredients");
+    this.ingredientsAndQtyList.forEach((ingredient) => {
+      let li = document.createElement("li");
+      li.innerHTML = ingredient;
+      // console.log(li, details);
+      // details.appendChild(li);
+    });
 
+    $wrapper.innerHTML = recipeCard;
     return $wrapper;
   }
 }
