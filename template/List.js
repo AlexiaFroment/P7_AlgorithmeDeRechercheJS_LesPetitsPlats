@@ -1,9 +1,9 @@
 class List {
-  constructor(ingredient, appliance, ustensil) {
+  constructor(ingredient, appliance, ustensil, number) {
     this.ingredient = ingredient;
     this.appliance = appliance;
     this.ustensil = ustensil;
-    console.log(this);
+    this.number = number;
   }
 
   createIngredientsList() {
@@ -20,7 +20,7 @@ class List {
     const $wrapper = document.createElement("li");
 
     const applianceList = `
-    <a class="dropdown-item" href="#">${this.ingredient}</a>
+    <a class="dropdown-item" href="#">${this.appliance}</a>
     `;
 
     $wrapper.innerHTML = applianceList;
@@ -30,19 +30,16 @@ class List {
     const $wrapper = document.createElement("li");
 
     const ingredientList = `
-    <a class="dropdown-item" href="#">${this.ingredient}</a>
+    <a class="dropdown-item" href="#">${this.ustensil}</a>
     `;
 
     $wrapper.innerHTML = ingredientList;
     return $wrapper;
   }
   createCountList() {
-    $wrapper = document.createElement("div");
+    const $wrapper = document.createElement("div");
     $wrapper.className = "py-2 px-4 fw-bold text-end";
     $wrapper.innerHTML = `${this.number} recettes`;
+    return $wrapper;
   }
-}
-
-{
-  /* <div class="py-2 px-4 fw-bold text-end">1500 recettes</div> */
 }

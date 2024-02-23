@@ -24,12 +24,23 @@ class Index {
     }
   }
 
-  // METHOD FILTER
+  /**
+   * METHODS FILTER
+   *  🟢 BY RECIPES
+   *  🔴 BY INGREDIENTS
+   *  🟢 BY APPLIANCE
+   *  🔴 BY USTENSILS
+   * */
+
   async filterRecipes() {
     const recipesData = await this.recipesApi.get();
+    let recipesDataFilter = [...recipesData];
 
     // Sort in alphabetical order
-    recipesData.sort((a, b) => {
+    // console.log(recipesData);
+    // recipesData.sort(this.sortAlpha);
+    // console.log(recipesData);
+    recipesDataFilter.sort((a, b) => {
       if (a.name < b.name) {
         return -1;
       } else if (a.name > b.name) {
@@ -39,37 +50,90 @@ class Index {
       }
     });
 
-    const recipesDataFilter = recipesData;
     const searchInput = document.querySelector(".search_input");
     const recipesSection = document.querySelector("#recipe");
+    const numberOfRecipes = document.querySelector("#number_recipes");
 
     searchInput.addEventListener("input", (e) => {
       // Delete current DOM
       recipesSection.innerHTML = "";
+      numberOfRecipes.innerHTML = "";
       // Value entered in the input
       let searchedItem = e.target.value.toLowerCase();
       // Create new arr to store the sort items
       let filteredRecipeData = [];
       recipesDataFilter.filter((recipeData) => {
-        if (recipeData.name.toLowerCase().includes(searchedItem)) {
+        const name = recipeData.name.toLowerCase().includes(searchedItem);
+        const appliance = recipeData.appliance
+          .toLowerCase()
+          .includes(searchedItem);
+
+        console.log(recipesDataFilter, "recipeData : ", recipeData);
+        for (let ingredient of recipeData.ingredients) {
+          // console.log(ingredient);
+        }
+
+        // const ingredient = recipeData.ingredients;
+
+        if (name || appliance) {
           filteredRecipeData.push(recipeData);
         }
       });
+
       // Create new DOM with filtered data
-      filteredRecipeData.forEach((recipe, ingredient, qty) => {
-        let ingredientsList = [];
-        let qtyList = [];
-        for (let i = 0; i < recipe.ingredients.length; i++) {
-          ingredient = recipe.ingredients[i].ingredient;
-          ingredientsList.push(ingredient);
-          qty = recipe.ingredients[i].quantity;
-          qtyList.push(qty);
-        }
-        const template = new RecipeCard(recipe, ingredientsList, qtyList);
-        recipesSection.appendChild(template.createRecipeCard());
-      });
+      const number = filteredRecipeData.length;
+      const templateCount = new List(null, null, null, number);
+      numberOfRecipes.appendChild(templateCount.createCountList());
+
+      if (number === 50) {
+        recipesData.forEach((recipe, ingredient, qty) => {
+          let ingredientsAndQtyList = [];
+
+          for (let i = 0; i < recipe.ingredients.length; i++) {
+            ingredient = recipe.ingredients[i].ingredient;
+            qty = recipe.ingredients[i].quantity;
+            ingredientsAndQtyList.push(ingredient);
+            ingredientsAndQtyList.push(qty);
+          }
+
+          const template = new RecipeCard(recipe, ingredientsAndQtyList);
+          recipesSection.appendChild(template.createRecipeCard());
+        });
+      } else {
+        filteredRecipeData.forEach((recipe, ingredient, qty) => {
+          let ingredientsList = [];
+          let qtyList = [];
+          for (let i = 0; i < recipe.ingredients.length; i++) {
+            ingredient = recipe.ingredients[i].ingredient;
+            ingredientsList.push(ingredient);
+            qty = recipe.ingredients[i].quantity;
+            qtyList.push(qty);
+          }
+          console.log(filteredRecipeData);
+          const templateCard = new RecipeCard(recipe, ingredientsList, qtyList);
+          recipesSection.appendChild(templateCard.createRecipeCard());
+        });
+      }
     });
   }
+
+  // async filterIngredients() {
+  //   const recipesData = await this.recipesApi.get();
+  //   const filteredArr = recipesData.map((el) => el.ingredients);
+  //   let listIngredients = [];
+  //   filteredArr.forEach((ingredient) => {
+  //     for (let i = 0; i < ingredient.length; i++) {
+  //       listIngredients.push(ingredient[i].ingredient);
+  //     }
+  //   });
+  //   listIngredients.sort(this.sortAlpha);
+  //   let listIngredientsFilterByAlpha = listIngredients;
+  //   let listUniqIngredients = this.uniqItem(listIngredientsFilterByAlpha);
+  //   // console.log(listUniqIngredients);
+
+  //   const searchInput = document.querySelector(".search_input");
+  //   const recipesSection = document.querySelector("#recipe");
+  // }
 
   // GET INGREDIENTS
   async ingredients() {
@@ -85,7 +149,7 @@ class Index {
 
     list1.sort(this.sortAlpha);
 
-    let uniqList = this.uniqItem(list1);
+    const uniqList = this.uniqItem(list1);
 
     const btn1 = document.querySelector("#list1");
     uniqList.forEach((ingredient) => {
@@ -104,7 +168,7 @@ class Index {
 
     const btn2 = document.querySelector("#list2");
     uniqList.forEach((appliance) => {
-      const template = new List(appliance);
+      const template = new List(null, appliance, null);
       btn2.appendChild(template.createApplianceList());
     });
   }
@@ -126,16 +190,27 @@ class Index {
     let uniqList = this.uniqItem(capitalizeList3);
     const btn3 = document.querySelector("#list3");
     uniqList.forEach((ustensil) => {
-      const template = new List(ustensil);
+      const template = new List(null, null, ustensil);
       btn3.appendChild(template.createUstensilsList());
     });
+  }
+
+  // GET NUMBER OF RECIPES DISPLAY
+  async numberOfRecipes() {
+    const recipesData = await this.recipesApi.get();
+    const number = recipesData.length;
+
+    const numOfRecipes = document.querySelector("#number_recipes");
+
+    const template = new List(null, null, null, number);
+    numOfRecipes.appendChild(template.createCountList());
   }
 
   // GET RECIPES
   async recipes() {
     const recipesData = await this.recipesApi.get();
-
     const recipesSection = document.querySelector("#recipe");
+
     recipesData.forEach((recipe, ingredient, qty) => {
       let ingredientsAndQtyList = [];
 
@@ -153,9 +228,11 @@ class Index {
 
   async init() {
     await this.filterRecipes();
+    // await this.filterIngredients();
     await this.ingredients();
     await this.appliance();
     await this.ustensils();
+    await this.numberOfRecipes();
     await this.recipes();
   }
 }

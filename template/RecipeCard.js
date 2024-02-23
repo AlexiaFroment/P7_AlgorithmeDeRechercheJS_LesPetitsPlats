@@ -31,6 +31,7 @@ class RecipeCard {
         <p class="card-text">${this.recipe.description}</p>
       </div>
       <span class="ingredients card-text fs-6">INGREDIENTS</span>
+      
       <ul id="recipe_ingredients">
      
       </ul>
@@ -39,11 +40,14 @@ class RecipeCard {
     </div>
     `;
 
-    let details = document.querySelector("#recipe_ingredients");
+    const details = document.querySelector("#recipe_ingredients");
+    console.log(details);
+
     this.ingredientsAndQtyList.forEach((ingredient) => {
+      console.log(ingredient);
       let li = document.createElement("li");
       li.innerHTML = ingredient;
-      // console.log(li, details);
+      console.log(details);
       // details.appendChild(li);
     });
 
