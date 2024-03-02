@@ -7,49 +7,48 @@
  * Display each ingredient qty of the recipe 🟥
  */
 class RecipeCard {
-  constructor(recipe, ingredientsAndQtyList) {
+  constructor(recipe) {
     this.recipe = recipe;
-    this.ingredientsAndQtyList = ingredientsAndQtyList;
-
-    // console.log(this);
   }
 
   // Create card
   createRecipeCard() {
-    // console.log(this);
-
     const $wrapper = document.createElement("div");
     $wrapper.className = "col";
 
     const recipeCard = `
     <div class="card">
-    <img src="assets/imgCard/${this.recipe.image}" class="imgRecipe card-img-top d-block w-100" alt="${this.recipe.name}">
+    <img src="assets/imgCard/${this.recipe.image}" 
+    class="imgRecipe card-img-top d-block w-100" 
+    alt="${this.recipe.name}">
     <div class="card-body">
       <h3 class="anton card-title pb-3 fs-5 fw-bold">${this.recipe.name}</h3>
-      <span class="card-text fs-6">RECETTE</span>
+      <span class="subtitle card-text text-darkGrey fs-6 fw-bold">RECETTE</span>
       <div id="recipe_details">
         <p class="card-text">${this.recipe.description}</p>
       </div>
-      <span class="ingredients card-text fs-6">INGREDIENTS</span>
+
+      <span class="subtitle card-text text-darkGrey fs-6 fw-bold">INGREDIENTS</span>
+      <div class="container">
+      <ul class="row" id="recipe_ingredients">
+
+      ${this.recipe.ingredients
+        .map(
+          (item) => `
+      <li class="col-6 p-0 g-3"> 
+      <span class="ingredient">${item.ingredient} </span> <br/>
+      <span class="qty text-darkGrey">${item.quantity ? item.quantity : ""} ${
+            item.unit ? item.unit : ""
+          }</span>
+      </li>
+    `
+        )
+        .join("")}
       
-      <ul id="recipe_ingredients">
-     
       </ul>
-     
     </div>
     </div>
     `;
-
-    const details = document.querySelector("#recipe_ingredients");
-    console.log(details);
-
-    this.ingredientsAndQtyList.forEach((ingredient) => {
-      console.log(ingredient);
-      let li = document.createElement("li");
-      li.innerHTML = ingredient;
-      console.log(details);
-      // details.appendChild(li);
-    });
 
     $wrapper.innerHTML = recipeCard;
     return $wrapper;

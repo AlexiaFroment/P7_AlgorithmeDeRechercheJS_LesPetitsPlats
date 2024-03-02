@@ -117,24 +117,6 @@ class Index {
     });
   }
 
-  // async filterIngredients() {
-  //   const recipesData = await this.recipesApi.get();
-  //   const filteredArr = recipesData.map((el) => el.ingredients);
-  //   let listIngredients = [];
-  //   filteredArr.forEach((ingredient) => {
-  //     for (let i = 0; i < ingredient.length; i++) {
-  //       listIngredients.push(ingredient[i].ingredient);
-  //     }
-  //   });
-  //   listIngredients.sort(this.sortAlpha);
-  //   let listIngredientsFilterByAlpha = listIngredients;
-  //   let listUniqIngredients = this.uniqItem(listIngredientsFilterByAlpha);
-  //   // console.log(listUniqIngredients);
-
-  //   const searchInput = document.querySelector(".search_input");
-  //   const recipesSection = document.querySelector("#recipe");
-  // }
-
   // GET INGREDIENTS
   async ingredients() {
     const recipesData = await this.recipesApi.get();
@@ -211,17 +193,8 @@ class Index {
     const recipesData = await this.recipesApi.get();
     const recipesSection = document.querySelector("#recipe");
 
-    recipesData.forEach((recipe, ingredient, qty) => {
-      let ingredientsAndQtyList = [];
-
-      for (let i = 0; i < recipe.ingredients.length; i++) {
-        ingredient = recipe.ingredients[i].ingredient;
-        qty = recipe.ingredients[i].quantity;
-        ingredientsAndQtyList.push(ingredient);
-        ingredientsAndQtyList.push(qty);
-      }
-
-      const template = new RecipeCard(recipe, ingredientsAndQtyList);
+    recipesData.forEach((recipe) => {
+      const template = new RecipeCard(recipe);
       recipesSection.appendChild(template.createRecipeCard());
     });
   }
