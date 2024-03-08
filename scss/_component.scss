@@ -8,10 +8,29 @@
   max-width: 60%;
 }
 
+// List
+a.dropdown-item:hover {
+  background: $yellow;
+}
+
+// Label
+.label {
+  min-width: 150px;
+}
+
 // RecipeCard
+.recipe_card {
+  .card-body {
+    min-height: 460px;
+  }
+}
 .imgRecipe {
   height: 230px;
   border-radius: 20px 20px 0 0;
+}
+.timer {
+  top: 10px;
+  right: 10px;
 }
 .subtitle {
   font-weight: 700;

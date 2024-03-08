@@ -6,14 +6,42 @@ class List {
     this.number = number;
   }
 
+  addActive(e) {
+    e.preventDefault();
+    e.target.classList.add("active");
+
+    // ADD LABEL IN DOM
+    const label = document.querySelector("#label");
+    const $wrapper = document.createElement("button");
+    $wrapper.className =
+      "label btn btn-yellow d-block my-2 d-flex justify-content-between";
+    const btn = `${e.target.id}
+    <span id="close"> X <span>
+    `;
+    $wrapper.innerHTML = btn;
+    label.appendChild($wrapper);
+
+    // DELETE LABEL IN DOM
+    const cross = document.getElementById("close");
+    cross.addEventListener("click", (e) => {
+      e.preventDefault();
+      console.log("clic", e.target, e.currentTarget);
+    });
+  }
+
   createIngredientsList() {
     const $wrapper = document.createElement("li");
+    $wrapper.className = "item";
 
     const ingredientList = `
-    <a class="dropdown-item" href="#">${this.ingredient}</a>
+    <a class="dropdown-item" href="#" id="${this.ingredient}">${this.ingredient}</a>
     `;
 
     $wrapper.innerHTML = ingredientList;
+
+    const list1 = document.querySelector("#list1");
+    list1.addEventListener("click", this.addActive);
+
     return $wrapper;
   }
   createApplianceList() {

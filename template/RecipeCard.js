@@ -17,10 +17,15 @@ class RecipeCard {
     $wrapper.className = "col";
 
     const recipeCard = `
-    <div class="card">
+    <div class="recipe_card card">
+    <div class="position-relative">
     <img src="assets/imgCard/${this.recipe.image}" 
     class="imgRecipe card-img-top d-block w-100" 
     alt="${this.recipe.name}">
+    <span class="timer position-absolute bg-yellow py-1 px-2 rounded-pill">${
+      this.recipe.time
+    }min</span>
+    </div>
     <div class="card-body">
       <h3 class="anton card-title pb-3 fs-5 fw-bold">${this.recipe.name}</h3>
       <span class="subtitle card-text text-darkGrey fs-6 fw-bold">RECETTE</span>
@@ -30,7 +35,7 @@ class RecipeCard {
 
       <span class="subtitle card-text text-darkGrey fs-6 fw-bold">INGREDIENTS</span>
       <div class="container">
-      <ul class="row" id="recipe_ingredients">
+      <ul class="row ps-0" id="recipe_ingredients">
 
       ${this.recipe.ingredients
         .map(

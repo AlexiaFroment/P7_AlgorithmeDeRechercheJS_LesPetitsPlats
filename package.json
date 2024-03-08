@@ -1,6 +1,7 @@
 {
   "name": "lespetitsplats2.0",
   "version": "1.0.0",
+  "type": "module",
   "description": "projetP8",
   "main": "index.js",
   "scripts": {
