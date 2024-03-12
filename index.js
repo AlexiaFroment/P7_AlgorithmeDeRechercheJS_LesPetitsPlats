@@ -40,6 +40,7 @@ class Index {
     // console.log(recipesData);
     // recipesData.sort(this.sortAlpha(name));
     // console.log(recipesData);
+
     recipesDataFilter.sort((a, b) => {
       if (a.name < b.name) {
         return -1;
@@ -57,7 +58,7 @@ class Index {
     searchInput.addEventListener("input", (e) => {
       // Regex pour supprimer les accents
       const regex = /[a7y]/gi;
-      console.log(regex.test("bC2t"));
+      // console.log(regex.test("bC2t"));
       // console.log("AbC".match(/ab/gi));
       // Delete current DOM
       recipesSection.innerHTML = "";
@@ -72,20 +73,14 @@ class Index {
 
         // Ingredients
         const ingredient = () => {
-          for (let i = 0; i < recipeData.ingredients.length; i++) {
-            let ingr = recipeData.ingredients[i].ingredient.toLowerCase();
-            if (ingr !== searchedItem) {
-              return;
+          for (const ingredient of recipeData.ingredients) {
+            console.log(recipeData.ingredients, ingredient.ingredient);
+            const ingr = ingredient.ingredient.toLowerCase();
+            console.log(ingr);
+            if (ingr === searchedItem) {
+              console.log(ingr, searchedItem, "✅");
+              return ingr;
             }
-
-            const ingredientSearch = ingr.includes(searchedItem);
-            // console.log(
-            //   ingr,
-            //   searchedItem,
-            //   "ingredient recherché :",
-            //   ingredientSearch
-            // );
-            return ingredientSearch;
           }
         };
 
@@ -93,26 +88,21 @@ class Index {
         const appliance = recipeData.appliance
           .toLowerCase()
           .includes(searchedItem);
+
         // Ustensils
-
         const ustensils = () => {
-          for (let i = 0; i < recipeData.ustensils.length; i++) {
-            console.log(recipeData.ustensils);
-            const ust = recipeData.ustensils[i].toLowerCase();
-            if (ust !== searchedItem) {
-              console.log("Ca ne match pas 🤖", ust, searchedItem);
-
-              return;
+          for (const ustensil of recipeData.ustensils) {
+            // console.log(recipeData.ustensils, ustensil, searchedItem);
+            if (ustensil.toLowerCase() === searchedItem) {
+              // console.log("✅");
+              return ustensil;
             }
-            console.log("Ca match 🎉", ust, searchedItem);
-            const ustensilSearch = ust.includes(searchedItem);
-            return ustensilSearch;
           }
         };
 
         if (name || appliance || ingredient() || ustensils()) {
           filteredRecipeData.push(recipeData);
-          console.log("tablo", filteredRecipeData);
+          // console.log("tablo", filteredRecipeData);
         }
       });
 
