@@ -78,8 +78,13 @@ a.dropdown-item:hover {
   background: #ffd15b;
 }
 
-.label {
+#tag {
+  display: flex;
+}
+
+.tag {
   min-width: 150px;
+  margin: 0 5px;
 }
 
 .recipe_card .card-body {

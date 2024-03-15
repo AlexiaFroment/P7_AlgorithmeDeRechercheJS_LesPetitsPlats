@@ -13,9 +13,13 @@ a.dropdown-item:hover {
   background: $yellow;
 }
 
-// Label
-.label {
+//tag
+#tag {
+  display: flex;
+}
+.tag {
   min-width: 150px;
+  margin: 0 5px;
 }
 
 // RecipeCard

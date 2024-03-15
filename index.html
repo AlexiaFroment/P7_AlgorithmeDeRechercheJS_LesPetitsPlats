@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Les petits plats 2.0</title>
+    <link rel="icon" href="./assets/favicon-32x32.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;700&display=swap"
@@ -31,8 +32,10 @@
         </div>
     </header>
     <main>
+        <!-- FILTER SECTION -->
         <div id="filter" class="container row justify-content-center mx-auto py-3">
             <!-- dropdow to set up -->
+            <!-- INGREDIENTS -->
             <div class="dropdown col-2">
                 <button class="btn btn-light dropdown-toggle min-w" type="button" id="dropdownMenuButton1"
                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -43,7 +46,7 @@
                     <!-- JS ITEM -->
                 </ul>
             </div>
-
+            <!-- APPLIANCES -->
             <div class="dropdown col-2">
                 <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton2"
                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -53,6 +56,7 @@
                     <!-- JS ITEM -->
                 </ul>
             </div>
+            <!-- USTENSILS -->
             <div class="dropdown col-2">
                 <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton3"
                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -62,14 +66,15 @@
                     <!-- JS ITEM -->
                 </ul>
             </div>
-
+            <!-- COUNTER RECIPES -->
             <div id="number_recipes" class="col-6 ">
-                <!-- JS COUNTER -->
-                <!-- <div class="py-2 px-4 fw-bold text-end">1500 recettes</div> -->
             </div>
-
         </div>
-        <div id="label" class="container"></div>
+
+        <!-- TAG SECTION -->
+        <div id="tag" class="container"></div>
+
+        <!-- CARDS RECIPES -->
         <section id="recipe"
             class="container row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 d-flex justify-content-center mx-auto my-3">
         </section>
@@ -86,6 +91,8 @@
     <!-- TEMPLATES -->
     <script src="./template/RecipeCard.js"></script>
     <script src="./template/List.js"></script>
+    <script src="./template/IngredientsList.js"></script>
+    <script src="./template/AppliancesList.js"></script>
     <!-- API -->
     <script src="./api/ApiRecipes.js"></script>
     <!-- ENTRY POINT -->

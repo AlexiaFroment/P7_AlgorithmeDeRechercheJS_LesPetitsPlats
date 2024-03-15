@@ -14,14 +14,20 @@ class Index {
     return arr.filter((x, i) => arr.indexOf(x) === i);
   }
 
-  sortAlpha(a, b) {
-    if (a < b) {
-      return -1;
-    } else if (a > b) {
-      return 1;
-    } else {
-      return 0;
-    }
+  sortArr(arr) {
+    arr.sort((a, b) => {
+      if (a < b) {
+        return -1;
+      } else if (a > b) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+  }
+
+  strNoAccent(a) {
+    return a.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
 
   /**
@@ -35,11 +41,12 @@ class Index {
   async filterRecipes() {
     const recipesData = await this.recipesApi.get();
     let recipesDataFilter = [...recipesData];
+    console.log(recipesDataFilter);
 
+    // FAIRE UN TABLO DE NOM
     // Sort in alphabetical order
-    // console.log(recipesData);
-    // recipesData.sort(this.sortAlpha(name));
-    // console.log(recipesData);
+    // this.sortArr(recipesDataFilter);
+    // console.log(recipesDataFilter);
 
     recipesDataFilter.sort((a, b) => {
       if (a.name < b.name) {
@@ -56,53 +63,51 @@ class Index {
     const numberOfRecipes = document.querySelector("#number_recipes");
 
     searchInput.addEventListener("input", (e) => {
-      // Regex pour supprimer les accents
-      const regex = /[a7y]/gi;
-      // console.log(regex.test("bC2t"));
-      // console.log("AbC".match(/ab/gi));
       // Delete current DOM
       recipesSection.innerHTML = "";
       numberOfRecipes.innerHTML = "";
-      // Value entered in the input
-      let searchedItem = e.target.value.toLowerCase();
+      // Value entered in the input convert without accent and toLowerCase()
+      let searchedItem = this.strNoAccent(e.target.value.toLowerCase());
+
       // Create new arr to store the sort items
       let filteredRecipeData = [];
       recipesDataFilter.filter((recipeData) => {
-        // Recipe_name
-        const name = recipeData.name.toLowerCase().includes(searchedItem);
+        // Recipe_name convert without accent and toLowerCase() and check it matches with the searchItem
+        const nameStandardised = this.strNoAccent(
+          recipeData.name.toLowerCase()
+        );
+        const name = nameStandardised.includes(searchedItem);
 
-        // Ingredients
+        // Ingredients convert without accent and toLowerCase() and check it matches with the searchItem
         const ingredient = () => {
           for (const ingredient of recipeData.ingredients) {
-            console.log(recipeData.ingredients, ingredient.ingredient);
-            const ingr = ingredient.ingredient.toLowerCase();
-            console.log(ingr);
+            const ingr = this.strNoAccent(ingredient.ingredient.toLowerCase());
             if (ingr === searchedItem) {
-              console.log(ingr, searchedItem, "✅");
               return ingr;
             }
           }
         };
 
-        // Appliance
-        const appliance = recipeData.appliance
-          .toLowerCase()
-          .includes(searchedItem);
+        // Appliance convert without accent and toLowerCase() and check it matches with the searchItem
+        const applianceStandardised = this.strNoAccent(
+          recipeData.appliance.toLowerCase()
+        );
+        const appliance = applianceStandardised.includes(searchedItem);
 
-        // Ustensils
+        // Ustensils convert without accent and toLowerCase() and check it matches with the searchItem
         const ustensils = () => {
           for (const ustensil of recipeData.ustensils) {
-            // console.log(recipeData.ustensils, ustensil, searchedItem);
-            if (ustensil.toLowerCase() === searchedItem) {
-              // console.log("✅");
-              return ustensil;
+            const ustensilStandardised = this.strNoAccent(
+              ustensil.toLowerCase()
+            );
+            if (ustensilStandardised === searchedItem) {
+              return ustensilStandardised;
             }
           }
         };
 
         if (name || appliance || ingredient() || ustensils()) {
           filteredRecipeData.push(recipeData);
-          // console.log("tablo", filteredRecipeData);
         }
       });
 
@@ -143,9 +148,10 @@ class Index {
     });
   }
 
-  // GET INGREDIENTS
+  // CREATE INGREDIENTS DROPDOWN
   async ingredients() {
     const recipesData = await this.recipesApi.get();
+
     const filteredArr = recipesData.map((el) => el.ingredients);
 
     let list1 = [];
@@ -155,32 +161,36 @@ class Index {
       }
     });
 
-    list1.sort(this.sortAlpha);
+    this.sortArr(list1);
+
     const uniqList = this.uniqItem(list1);
 
     const btn1 = document.querySelector("#list1");
     uniqList.forEach((ingredient) => {
-      const template = new List(ingredient);
+      const template = new IngredientsList(ingredient, recipesData);
       btn1.appendChild(template.createIngredientsList());
     });
   }
 
-  // GET APPLIANCES
+  // CREATE APPLIANCE DROPDOWN
   async appliance() {
     const recipesData = await this.recipesApi.get();
+    const recipes = new AppliancesList(recipesData);
+
     let filteredArr = recipesData.map((el) => el.appliance);
-    filteredArr.sort(this.sortAlpha);
-    let list2 = filteredArr;
-    let uniqList = this.uniqItem(list2);
+
+    this.sortArr(filteredArr);
 
     const btn2 = document.querySelector("#list2");
+    let uniqList = this.uniqItem(filteredArr);
+
     uniqList.forEach((appliance) => {
-      const template = new List(null, appliance, null);
+      const template = new AppliancesList(null, appliance);
       btn2.appendChild(template.createApplianceList());
     });
   }
 
-  // GET USTENSILS
+  // CREATE USTENSILS DROPDOWN
   async ustensils() {
     const recipesData = await this.recipesApi.get();
     let filteredArr = recipesData.map((el) => el.ustensils);
@@ -192,7 +202,9 @@ class Index {
       }
     });
     let capitalizeList3 = list3.map((el) => this.capitalize(el));
-    capitalizeList3.sort(this.sortAlpha);
+
+    this.sortArr(capitalizeList3);
+
     let uniqList = this.uniqItem(capitalizeList3);
     const btn3 = document.querySelector("#list3");
     uniqList.forEach((ustensil) => {
