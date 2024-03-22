@@ -41,12 +41,6 @@ class Index {
   async filterRecipes() {
     const recipesData = await this.recipesApi.get();
     let recipesDataFilter = [...recipesData];
-    console.log(recipesDataFilter);
-
-    // FAIRE UN TABLO DE NOM
-    // Sort in alphabetical order
-    // this.sortArr(recipesDataFilter);
-    // console.log(recipesDataFilter);
 
     recipesDataFilter.sort((a, b) => {
       if (a.name < b.name) {

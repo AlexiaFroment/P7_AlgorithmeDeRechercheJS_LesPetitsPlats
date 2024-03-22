@@ -2,49 +2,47 @@ class AppliancesList {
   constructor(recipes, appliance) {
     this.recipes = recipes;
     this.appliance = appliance;
-    console.log(this);
+    // console.log(this.recipes, this.appliance);
   }
 
-  addActive(e) {
-    // e.preventDefault();
-    console.log(this.recipesData);
+  displayActive() {
+    /**
+     * IF (ISACTIVE) RETURN RECIPES WITH ACTIVE APPLIANCE
+     */
+    console.log(pomme);
+  }
+
+  // ADD AND REMOVE ACTIVE ON APPLIANCE CLASS
+  toggleActive(e) {
+    e.preventDefault();
     e.target.classList.add("active");
 
     // ADD TAG IN DOM
-    const tag = document.querySelector("#tag");
+    const tagDiv = document.querySelector("#tag");
+    const activeTag = document.querySelector(".dropdown-menu .active");
 
     let $wrapper = document.createElement("button");
+    $wrapper.id = `${e.target.id}`;
     $wrapper.className =
       "tag btn btn-yellow d-block my-2 d-flex justify-content-between";
-    console.log("id", e.target.id);
-
-    let btn = `${e.target.id} 
+    let btn = `${e.target.id}
       <span class="close" id="${e.target.id}"> X <span>
       `;
-
     $wrapper.innerHTML = btn;
-    tag.appendChild($wrapper);
-
-    // FILTRE
-    /**
-     * read id
-     * parcourir le tablo des ingrédients pour rechercher toutes les recettes
-     */
+    tagDiv.appendChild($wrapper);
+    this.displayActive();
 
     // DELETE TAG IN DOM
-    let cross = document.querySelector(".close", `${e.target.id}`);
-    console.log(cross);
-    cross.addEventListener("click", (e) => {
-      //   e.preventDefault();
-      // if(e.target.id)
-      console.log("clic", e.target, e.target.id);
-      $wrapper.remove(e.target);
+    document.querySelectorAll(".close", `${e.target.id}`).forEach((v) => {
+      v.addEventListener("click", (e) => {
+        tagDiv.removeChild($wrapper);
+        activeTag.classList.remove("active");
+      });
     });
   }
 
   // APPLIANCE
   createApplianceList() {
-    console.log(this.recipesData);
     const $wrapper = document.createElement("li");
 
     const applianceList = `
@@ -52,7 +50,7 @@ class AppliancesList {
       `;
 
     const list2 = document.getElementById("list2");
-    list2.addEventListener("click", this.addActive);
+    list2.addEventListener("click", this.toggleActive);
 
     $wrapper.innerHTML = applianceList;
     return $wrapper;
