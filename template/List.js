@@ -1,8 +1,5 @@
 class List {
-  constructor(ingredient, appliance, ustensil, number) {
-    this.ingredient = ingredient;
-    this.appliance = appliance;
-    this.ustensil = ustensil;
+  constructor(number) {
     this.number = number;
     // console.log(this);
   }
@@ -43,44 +40,6 @@ class List {
     });
   }
 
-  // INGREDIENT
-  createIngredientsList() {
-    const $wrapper = document.createElement("li");
-    $wrapper.className = "item";
-
-    const ingredientList = `
-    <a class="dropdown-item" href="#" id="${this.ingredient}">${this.ingredient}</a>
-    `;
-
-    $wrapper.innerHTML = ingredientList;
-
-    const list1 = document.querySelector("#list1");
-    list1.addEventListener("click", this.addActive);
-
-    return $wrapper;
-  }
-  // APPLIANCE
-  createApplianceList() {
-    const $wrapper = document.createElement("li");
-
-    const applianceList = `
-    <a class="dropdown-item" href="#">${this.appliance}</a>
-    `;
-
-    $wrapper.innerHTML = applianceList;
-    return $wrapper;
-  }
-  // USTENSILS
-  createUstensilsList() {
-    const $wrapper = document.createElement("li");
-
-    const ingredientList = `
-    <a class="dropdown-item" href="#">${this.ustensil}</a>
-    `;
-
-    $wrapper.innerHTML = ingredientList;
-    return $wrapper;
-  }
   // COUNTER
   createCountList() {
     const $wrapper = document.createElement("div");

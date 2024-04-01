@@ -2,55 +2,86 @@ class AppliancesList {
   constructor(recipes, appliance) {
     this.recipes = recipes;
     this.appliance = appliance;
-    // console.log(this.recipes, this.appliance);
+    // console.log("constructor", this.recipes, "✅");
   }
 
-  displayActive() {
-    /**
-     * IF (ISACTIVE) RETURN RECIPES WITH ACTIVE APPLIANCE
-     */
-    console.log(pomme);
+  // MEP FILTER ON RECIPESDATA TO DISPLAY RECIPES BY TAG
+  displayFilteredRecipes(arrAppliance, recipes, appliance) {
+    // console.log("filterRecipes", arrAppliance, recipes, appliance, "✅");
+
+    const numberOfRecipes = document.getElementById("number_recipes");
+    const recipesCards = document.getElementById("recipe");
+    let recipesFiltered = [];
+
+    for (let app of arrAppliance) {
+      recipesFiltered = recipesFiltered.concat(
+        recipes.filter((recipe) => recipe.appliance === app)
+      );
+    }
+    const number = recipesFiltered.length;
+    numberOfRecipes.innerHTML = "";
+    recipesCards.innerHTML = "";
+
+    const templateCount = new List(number);
+    numberOfRecipes.appendChild(templateCount.createCountList());
+
+    recipesFiltered.forEach((recipe) => {
+      console.log(recipe);
+      const templateCard = new RecipeCard(recipe);
+      recipesCards.appendChild(templateCard.createRecipeCard());
+    });
+    return recipesFiltered;
   }
 
-  // ADD AND REMOVE ACTIVE ON APPLIANCE CLASS
-  toggleActive(e) {
+  // ADD AND REMOVE ACTIVE ON APPLIANCE CLASS AND RETURN ACTIVE VALUE
+  toggleIsActive(e, arrAppliance, recipes, appliance) {
+    // console.log("toggle", recipes, appliance, "✅");
     e.preventDefault();
-    e.target.classList.add("active");
 
     // ADD TAG IN DOM
     const tagDiv = document.querySelector("#tag");
-    const activeTag = document.querySelector(".dropdown-menu .active");
+    let value = e.target;
+    value.classList.add("active");
 
-    let $wrapper = document.createElement("button");
-    $wrapper.id = `${e.target.id}`;
-    $wrapper.className =
-      "tag btn btn-yellow d-block my-2 d-flex justify-content-between";
-    let btn = `${e.target.id}
-      <span class="close" id="${e.target.id}"> X <span>
-      `;
-    $wrapper.innerHTML = btn;
-    tagDiv.appendChild($wrapper);
-    this.displayActive();
+    arrAppliance.forEach((appliance, index) => {
+      const template = new TagList(appliance, index);
+      const tag = template.createTag();
+      tagDiv.appendChild(tag);
+      // console.log(arrAppliance, "✅");
 
-    // DELETE TAG IN DOM
-    document.querySelectorAll(".close", `${e.target.id}`).forEach((v) => {
-      v.addEventListener("click", (e) => {
-        tagDiv.removeChild($wrapper);
-        activeTag.classList.remove("active");
+      const closeBtnId = template.fixId(appliance);
+      const closeBtn = document.getElementById(closeBtnId);
+      closeBtn.dataset.index = index;
+      // console.log(closeBtn);
+
+      closeBtn.addEventListener("click", function () {
+        const currentIndex = Number(this.dataset.index);
+        arrAppliance.splice(currentIndex, 1);
+
+        const updateIndexCloseBtns = document.querySelectorAll(".close");
+        updateIndexCloseBtns.forEach((btn, index) => {
+          if (index > currentIndex) {
+            btn.dataset.index = Number(btn.dataset.index) - 1;
+          }
+        });
+
+        value.classList.remove("active");
+        this.parentNode.remove();
+        // console.log("return", arrAppliance);
+        return arrAppliance;
       });
     });
+    this.displayFilteredRecipes(arrAppliance, recipes, appliance);
   }
 
   // APPLIANCE
   createApplianceList() {
+    // console.log("create", this.recipes, "✅");
     const $wrapper = document.createElement("li");
 
     const applianceList = `
       <a class="dropdown-item" href="#" id="${this.appliance}">${this.appliance}</a>
       `;
-
-    const list2 = document.getElementById("list2");
-    list2.addEventListener("click", this.toggleActive);
 
     $wrapper.innerHTML = applianceList;
     return $wrapper;

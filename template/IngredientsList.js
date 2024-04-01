@@ -3,32 +3,31 @@ class IngredientsList {
     this.ingredient = ingredient;
     this.recipesData = recipesData;
 
-    // console.log(this.recipesData);
+    // console.log("ingredients", this, "✅");
   }
 
-  //   ADD ACTIVE ON EACH NGREDIENT SELECTED
+  //   ADD ACTIVE ON EACH NGREDIENT SELECTED IN DROPDOWN AND REMOVE THIS CLASS WHEN I CLICK ON THE CROSS
 
-  addActive(e) {
+  toggleIsActive(e) {
     e.preventDefault();
-    // console.log(this.recipesData);
-    e.target.classList.add("active");
+    console.log("this", this.ingredient, this.recipesData, "✅");
+
+    let value = e.target.id;
+    let selection = document.getElementById(value);
+
+    selection.classList.add("active");
 
     // ADD TAG IN DOM
-    const tag = document.querySelector("#tag");
-
-    const $wrapper = document.createElement("button");
+    const tagDiv = document.querySelector("#tag");
+    let $wrapper = document.createElement("button");
+    $wrapper.id = value;
     $wrapper.className =
       "tag btn btn-yellow d-block my-2 d-flex justify-content-between";
-
-    const btn = `${e.target.id} 
-      <span class="close" id="${e.target.id}"> X <span>
-      `;
-
+    let btn = `${value}
+    <span class="close" id="${value.id}"> X <span>
+    `;
     $wrapper.innerHTML = btn;
-    tag.appendChild($wrapper);
-
-    console.log(e.target, e.target.id);
-    return $wrapper;
+    tagDiv.appendChild($wrapper);
   }
 
   // FILTRE
@@ -44,17 +43,18 @@ class IngredientsList {
 
   // INGREDIENT
   createIngredientsList() {
+    // console.log(this.ingredient, this.recipesData, "✅");
     const $wrapper = document.createElement("li");
     $wrapper.className = "item";
 
     const ingredientList = `
-      <a class="dropdown-item" href="#" id="${this.ingredient}">${this.ingredient}</a>
+      <a class="dropdown-item" href="#" id="${this.ingredient}"> ${this.ingredient}  </a>
       `;
 
     $wrapper.innerHTML = ingredientList;
 
     const list1 = document.querySelector("#list1");
-    list1.addEventListener("click", this.addActive);
+    list1.addEventListener("click", (e) => this.toggleIsActive(e));
 
     return $wrapper;
   }

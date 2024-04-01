@@ -1,3 +1,4 @@
+// import { AppliancesList } from "./template/AppliancesList";
 class Index {
   constructor() {
     // call API to get data
@@ -6,7 +7,7 @@ class Index {
 
   // METHODS
   capitalize(str) {
-    const capitalize = str.charAt(0).toLowerCase() + str.slice(1);
+    const capitalize = str.charAt(0).toUpperCase() + str.slice(1);
     return capitalize;
   }
 
@@ -71,6 +72,7 @@ class Index {
           recipeData.name.toLowerCase()
         );
         const name = nameStandardised.includes(searchedItem);
+        console.log(name);
 
         // Ingredients convert without accent and toLowerCase() and check it matches with the searchItem
         const ingredient = () => {
@@ -107,7 +109,7 @@ class Index {
 
       // Create new DOM with filtered data
       const number = filteredRecipeData.length;
-      const templateCount = new List(null, null, null, number);
+      const templateCount = new List(number);
       numberOfRecipes.appendChild(templateCount.createCountList());
 
       if (number === 50) {
@@ -120,7 +122,7 @@ class Index {
             ingredientsAndQtyList.push(ingredient);
             ingredientsAndQtyList.push(qty);
           }
-
+          console.log(recipe);
           const template = new RecipeCard(recipe, ingredientsAndQtyList);
           recipesSection.appendChild(template.createRecipeCard());
         });
@@ -155,9 +157,9 @@ class Index {
       }
     });
 
-    this.sortArr(list1);
-
-    const uniqList = this.uniqItem(list1);
+    let capitalizeList1 = list1.map((el) => this.capitalize(el));
+    this.sortArr(capitalizeList1);
+    const uniqList = this.uniqItem(capitalizeList1);
 
     const btn1 = document.querySelector("#list1");
     uniqList.forEach((ingredient) => {
@@ -169,18 +171,29 @@ class Index {
   // CREATE APPLIANCE DROPDOWN
   async appliance() {
     const recipesData = await this.recipesApi.get();
-    const recipes = new AppliancesList(recipesData);
 
     let filteredArr = recipesData.map((el) => el.appliance);
-
-    this.sortArr(filteredArr);
+    let capitalizeList2 = filteredArr.map((el) => this.capitalize(el));
+    this.sortArr(capitalizeList2);
 
     const btn2 = document.querySelector("#list2");
     let uniqList = this.uniqItem(filteredArr);
 
     uniqList.forEach((appliance) => {
-      const template = new AppliancesList(null, appliance);
+      const template = new AppliancesList(recipesData, appliance);
       btn2.appendChild(template.createApplianceList());
+    });
+
+    const dropDownAppliance = new AppliancesList();
+    const list2 = document.getElementById("list2");
+    const tagDiv = document.querySelector("#tag");
+    const arrAppliance = [];
+
+    list2.addEventListener("click", function (e) {
+      e.preventDefault();
+      tagDiv.innerHTML = "";
+      arrAppliance.push(e.target.id);
+      dropDownAppliance.toggleIsActive(e, arrAppliance, recipesData, uniqList);
     });
   }
 
@@ -202,7 +215,7 @@ class Index {
     let uniqList = this.uniqItem(capitalizeList3);
     const btn3 = document.querySelector("#list3");
     uniqList.forEach((ustensil) => {
-      const template = new List(null, null, ustensil);
+      const template = new UstensilsList(recipesData, ustensil);
       btn3.appendChild(template.createUstensilsList());
     });
   }
@@ -214,7 +227,7 @@ class Index {
 
     const numOfRecipes = document.querySelector("#number_recipes");
 
-    const template = new List(null, null, null, number);
+    const template = new List(number);
     numOfRecipes.appendChild(template.createCountList());
   }
 
