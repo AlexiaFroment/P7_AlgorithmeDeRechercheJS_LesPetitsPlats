@@ -19,7 +19,7 @@ class TagList {
     $wrapper.className =
       "tag btn btn-yellow d-block my-2 d-flex justify-content-between";
     let btn = `${this.appliance}
-        <span class="close" id="${id}"> X <span>`;
+          <span class="close" id="${id}"> X <span>`;
     $wrapper.innerHTML = btn;
     return $wrapper;
   }

@@ -72,7 +72,7 @@ class Index {
           recipeData.name.toLowerCase()
         );
         const name = nameStandardised.includes(searchedItem);
-        console.log(name);
+        // console.log(name);
 
         // Ingredients convert without accent and toLowerCase() and check it matches with the searchItem
         const ingredient = () => {
@@ -161,10 +161,24 @@ class Index {
     this.sortArr(capitalizeList1);
     const uniqList = this.uniqItem(capitalizeList1);
 
-    const btn1 = document.querySelector("#list1");
+    const btn1 = document.getElementById("List1");
     uniqList.forEach((ingredient) => {
       const template = new IngredientsList(ingredient, recipesData);
       btn1.appendChild(template.createIngredientsList());
+    });
+
+    // const dropDownIngredient = new TagList();
+    const dropDownIngredient = new IngredientsList();
+
+    const List1 = document.getElementById("List1");
+    const tagDiv = document.getElementById("tag");
+    const arr = [];
+
+    List1.addEventListener("click", function (e) {
+      e.preventDefault();
+      tagDiv.innerHTML = "";
+      arr.push(e.target.id);
+      dropDownIngredient.toggleIsActive(e, arr, recipesData, uniqList);
     });
   }
 
@@ -176,7 +190,7 @@ class Index {
     let capitalizeList2 = filteredArr.map((el) => this.capitalize(el));
     this.sortArr(capitalizeList2);
 
-    const btn2 = document.querySelector("#list2");
+    const btn2 = document.getElementById("List2");
     let uniqList = this.uniqItem(filteredArr);
 
     uniqList.forEach((appliance) => {
@@ -184,16 +198,17 @@ class Index {
       btn2.appendChild(template.createApplianceList());
     });
 
-    const dropDownAppliance = new AppliancesList();
-    const list2 = document.getElementById("list2");
-    const tagDiv = document.querySelector("#tag");
-    const arrAppliance = [];
+    // ⚠️ TAG CLASS
+    const dropDownAppliance = new TagList();
+    const List2 = document.getElementById("List2");
+    const tagDiv = document.getElementById("tag");
+    const arr = [];
 
-    list2.addEventListener("click", function (e) {
+    List2.addEventListener("click", function (e) {
       e.preventDefault();
       tagDiv.innerHTML = "";
-      arrAppliance.push(e.target.id);
-      dropDownAppliance.toggleIsActive(e, arrAppliance, recipesData, uniqList);
+      arr.push(e.target.id);
+      dropDownAppliance.toggleIsActive(e, arr, recipesData, uniqList);
     });
   }
 
@@ -213,10 +228,23 @@ class Index {
     this.sortArr(capitalizeList3);
 
     let uniqList = this.uniqItem(capitalizeList3);
-    const btn3 = document.querySelector("#list3");
+    const btn3 = document.getElementById("List3");
     uniqList.forEach((ustensil) => {
       const template = new UstensilsList(recipesData, ustensil);
       btn3.appendChild(template.createUstensilsList());
+    });
+
+    // ⚠️ MEP ON CLASS TAGLIST
+    const dropDownUstensil = new TagList();
+    const List3 = document.getElementById("List3");
+    const tagDiv = document.getElementById("tag");
+    const arr = [];
+
+    List3.addEventListener("click", function (e) {
+      e.preventDefault();
+      tagDiv.innerHTML = "";
+      arr.push(e.target.id);
+      dropDownUstensil.toggleIsActive(e, arr, recipesData, uniqList);
     });
   }
 

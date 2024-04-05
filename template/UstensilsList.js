@@ -3,15 +3,17 @@ class UstensilsList {
     this.recipes = recipes;
     this.ustensil = ustensil;
   }
+
   // USTENSILS
   createUstensilsList() {
+    // console.log("create : ", this.ustensil, "✅");
     const $wrapper = document.createElement("li");
 
-    const ingredientList = `
-    <a class="dropdown-item" href="#">${this.ustensil}</a>
+    const ustensilList = `
+    <a class="dropdown-item" href="#" "id="${this.ustensil}">${this.ustensil}</a>
     `;
 
-    $wrapper.innerHTML = ingredientList;
+    $wrapper.innerHTML = ustensilList;
     return $wrapper;
   }
 }
