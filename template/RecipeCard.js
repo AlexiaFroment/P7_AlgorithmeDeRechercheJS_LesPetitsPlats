@@ -1,11 +1,3 @@
-/**
- * Create each card in the json file ✅
- * Create a list of ingredients for each card ✅
- * Create a list of ingredients qty for each card ✅
- *    Don't display undefined qty 🟥
- * Display each ingredient of the recipe 🟥
- * Display each ingredient qty of the recipe 🟥
- */
 class RecipeCard {
   constructor(recipe) {
     this.recipe = recipe;

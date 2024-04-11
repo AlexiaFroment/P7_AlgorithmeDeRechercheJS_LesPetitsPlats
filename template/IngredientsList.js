@@ -1,26 +1,32 @@
 class IngredientsList {
-  constructor(ingredient, recipesData) {
+  constructor(ingredient, recipe) {
     this.ingredient = ingredient;
-    this.recipesData = recipesData;
-    // console.log("ingredients", this, "✅");
+    this.recipe = recipe;
+    // console.log(this, "✅");
   }
 
   // MEP FILTER ON RECIPESDATA TO DISPLAY RECIPES BY TAG
   displayFilteredRecipes(arr, recipes, ingredient) {
     const numberOfRecipes = document.getElementById("number_recipes");
     const recipesCards = document.getElementById("recipe");
-    let recipesFiltered = [];
+    const recipesFiltered = [];
 
     for (let recipe of recipes) {
-      // console.log(recipe, "✅");
+      let allValuesPresent = true;
 
-      for (let ingredient of recipe.ingredients) {
-        // console.log("ligne18", ingredient, recipe);
-        if (arr.includes(ingredient.ingredient)) {
-          recipesFiltered.push({
-            recipe,
-          });
+      for (let ingredient of arr) {
+        if (
+          !recipe.ingredients.some(
+            (recipeIngredient) => recipeIngredient.ingredient === ingredient
+          )
+        ) {
+          allValuesPresent = false;
+
+          break;
         }
+      }
+      if (allValuesPresent) {
+        recipesFiltered.push(recipe);
       }
     }
 
@@ -30,39 +36,34 @@ class IngredientsList {
 
     const templateCount = new List(number);
     numberOfRecipes.appendChild(templateCount.createCountList());
-    // console.log("ingredient", recipesFiltered, "❌");
-    console.log("filtered36", recipesFiltered);
+
     recipesFiltered.forEach((recipe) => {
-      console.log("recipeIngredient", recipe);
       const templateCard = new RecipeCard(recipe);
       recipesCards.appendChild(templateCard.createRecipeCard());
     });
-    return recipesFiltered;
   }
   //   ADD ACTIVE ON EACH NGREDIENT SELECTED IN DROPDOWN AND REMOVE THIS CLASS WHEN I CLICK ON THE CROSS
   toggleIsActive(e, arr, recipes, ingredient) {
     // console.log(recipes, ingredients, "✅");
-
+    e.preventDefault();
     // ADD TAG IN DOM
     const tagDiv = document.querySelector("#tag");
     let value = e.target;
-    console.log(value);
     value.classList.add("active");
 
     arr.forEach((ingredient, index) => {
-      const template = new TagList(null, null, ingredient);
+      const template = new TagList(ingredient);
       const tag = template.createTag(ingredient);
       tagDiv.appendChild(tag);
-      console.log(arr, "✅");
 
       const closeBtnId = template.fixId(ingredient);
       const closeBtn = document.getElementById(closeBtnId);
       closeBtn.dataset.index = index;
-      // console.log(closeBtn);
 
       closeBtn.addEventListener("click", function () {
         const currentIndex = Number(this.dataset.index);
         arr.splice(currentIndex, 1);
+
         const updateIndexCloseBtns = document.querySelectorAll(".close");
         updateIndexCloseBtns.forEach((btn, index) => {
           if (index > currentIndex) {
@@ -72,8 +73,8 @@ class IngredientsList {
 
         value.classList.remove("active");
         this.parentNode.remove();
-        console.log(arr);
-        return arr;
+        const arrUpdate = new IngredientsList();
+        arrUpdate.displayFilteredRecipes(arr, recipes, ingredient);
       });
     });
     this.displayFilteredRecipes(arr, recipes, ingredient);
