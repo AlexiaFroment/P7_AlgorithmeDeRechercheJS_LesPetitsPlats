@@ -2,6 +2,7 @@ class Index {
   constructor() {
     // call API to get data
     this.recipesApi = new ApiRecipes("./data/recipes.json");
+    this.dropdown = new TagList();
   }
 
   /**
@@ -17,7 +18,6 @@ class Index {
     let recipesDataFilter = [...recipesData];
 
     Utils.sortArr(recipesDataFilter, "name");
-    console.log(recipesDataFilter);
 
     const searchInput = document.querySelector(".search_input");
     const recipesSection = document.querySelector("#recipe");
@@ -128,21 +128,17 @@ class Index {
 
     const btn1 = document.getElementById("List1");
     uniqList.forEach((ingredient) => {
-      const template = new IngredientsList(ingredient, recipesData);
-      btn1.appendChild(template.createIngredientsList());
+      const template = new Dropdown(recipesData, ingredient);
+      btn1.appendChild(template.createDropdown(ingredient));
     });
 
-    // const dropDownIngredient = new TagList();
-    const dropDownIngredient = new IngredientsList();
-    const List1 = document.getElementById("List1");
-    const tagDiv = document.getElementById("tag");
-    const arr = [];
+    const List1 = document.querySelectorAll("#List1 li");
 
-    List1.addEventListener("click", function (e) {
-      e.preventDefault();
-      tagDiv.innerHTML = "";
-      arr.push(e.target.id);
-      dropDownIngredient.toggleIsActive(e, arr, recipesData, uniqList);
+    List1.forEach((item) => {
+      item.addEventListener("click", (e) => {
+        e.preventDefault();
+        this.dropdown.toggleIsActive(e, recipesData, "ingr");
+      });
     });
   }
 
@@ -158,25 +154,22 @@ class Index {
     let uniqList = Utils.uniqItem(filteredArr);
 
     uniqList.forEach((appliance) => {
-      const template = new AppliancesList(appliance, recipesData);
-      btn2.appendChild(template.createApplianceList());
+      const template = new Dropdown(recipesData, null, appliance);
+      btn2.appendChild(template.createDropdown(appliance));
     });
 
-    // ⚠️ TAG CLASS
-    const dropDownAppliance = new AppliancesList();
-    const List2 = document.getElementById("List2");
-    const tagDiv = document.getElementById("tag");
-    const arr = [];
+    const List2 = document.querySelectorAll("#List2 li");
 
-    List2.addEventListener("click", function (e) {
-      e.preventDefault();
-      tagDiv.innerHTML = "";
-      arr.push(e.target.id);
-      dropDownAppliance.toggleIsActive(e, arr, recipesData, uniqList);
+    List2.forEach((item) => {
+      item.addEventListener("click", (e) => {
+        e.preventDefault();
+        this.dropdown.toggleIsActive(e, recipesData, "app");
+      });
     });
   }
 
   // CREATE USTENSILS DROPDOWN
+
   async ustensils() {
     const recipesData = await this.recipesApi.get();
     let filteredArr = recipesData.map((el) => el.ustensils);
@@ -195,21 +188,17 @@ class Index {
 
     const btn3 = document.getElementById("List3");
     uniqList.forEach((ustensil) => {
-      const template = new UstensilsList(ustensil, recipesData);
-      btn3.appendChild(template.createUstensilsList());
+      const template = new Dropdown(recipesData, null, null, ustensil);
+      btn3.appendChild(template.createDropdown(ustensil));
     });
 
-    // ⚠️ MEP ON CLASS TAGLIST
-    const dropDownUstensil = new UstensilsList();
-    const List3 = document.getElementById("List3");
-    const tagDiv = document.getElementById("tag");
-    const arr = [];
+    const List3 = document.querySelectorAll("#List3 li");
 
-    List3.addEventListener("click", function (e) {
-      e.preventDefault();
-      tagDiv.innerHTML = "";
-      arr.push(e.target.id);
-      dropDownUstensil.toggleIsActive(e, arr, recipesData, uniqList);
+    List3.forEach((item) => {
+      item.addEventListener("click", (e) => {
+        e.preventDefault();
+        this.dropdown.toggleIsActive(e, recipesData, "ust");
+      });
     });
   }
 
