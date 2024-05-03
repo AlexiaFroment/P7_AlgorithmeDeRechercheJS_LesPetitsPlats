@@ -7,8 +7,10 @@
 .search_input {
   max-width: 60%;
 }
-
 // List
+a.dropdown-item {
+  padding: 4px 0;
+}
 a.dropdown-item:hover {
   background: $yellow;
 }

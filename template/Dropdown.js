@@ -4,29 +4,51 @@ class Dropdown {
     this.ingredient = ingredient;
     this.appliance = appliance;
     this.ustensil = ustensil;
+    this.dropdown = new TagList();
   }
 
-  // DISPLAY RECIPES FILTERED
-  static displayFilteredRecipes(arr) {
-    const numberOfRecipes = document.getElementById("number_recipes");
-    const recipesCards = document.getElementById("recipe");
+  searchDropdown() {
+    const search = document.getElementById("searchL1");
+    // ARRVALUES = INGREDIENTS LIST IN THE DROPDOWN
+    const arrValues = [];
+    const nodeList = document.querySelectorAll("#List1 li a");
+    nodeList.forEach((node) => {
+      let nodeValue = node.innerText.trim();
+      arrValues.push(nodeValue);
+    });
 
-    const number = arr.length;
+    // SWITCH TOGGLEISACTIVE TO SUBMIT
+    search.addEventListener("submit", (e) => {
+      // console.log("search", search, "✅");
+      e.preventDefault();
 
-    numberOfRecipes.innerHTML = "";
-    recipesCards.innerHTML = "";
+      const searchValue = Utils.strNoAccent(
+        search.querySelector("input").value
+      );
+      // console.log("searchValue", searchValue, "✅");
+      arrValues.forEach((value, index) => {
+        // NE MATCHE PAS SUR LES MOTS COMPOSE (MATCH ET INCLUDES PARTENT EN BOUCLE INFINIE)
+        if (value.toLowerCase() === searchValue.toLowerCase()) {
+          // console.log(value.toLowerCase(), searchValue.toLowerCase());
+          const node = nodeList[index];
+          const recipesData = this.recipe;
+          // console.log("node", node);
 
-    const templateCount = new List(number);
-    numberOfRecipes.appendChild(templateCount.createCountList());
-
-    arr.forEach((recipe) => {
-      const templateCard = new RecipeCard(recipe);
-      recipesCards.appendChild(templateCard.createRecipeCard());
+          // const tag = new TagList();
+          console.log(this.dropdown);
+          this.dropdown.toggleIsActive(node, recipesData, "ingr");
+          console.log("dropdown", this.dropdown);
+          // console.log(value, this.recipe, "✅");
+          search.querySelector("input").value = "";
+        }
+        return;
+      });
     });
   }
 
   // MEP FILTER ON RECIPESDATA TO DISPLAY RECIPES BY INGREDIENT TAG
   static filteredRecipesByIngredient(arr, recipes) {
+    console.log("ingredients", arr.length);
     const recipesFiltered = [];
 
     for (let recipe of recipes) {
@@ -45,7 +67,7 @@ class Dropdown {
         recipesFiltered.push(recipe);
       }
     }
-    Dropdown.displayFilteredRecipes(recipesFiltered);
+    FilterRecipesMainSearch.displayRecipes(recipesFiltered);
     return recipesFiltered;
   }
 
@@ -53,7 +75,7 @@ class Dropdown {
     const recipesFiltered = recipes.filter((recipe) => {
       return arr.every((value) => recipe.appliance === value);
     });
-    Dropdown.displayFilteredRecipes(recipesFiltered);
+    FilterRecipesMainSearch.displayRecipes(recipesFiltered);
     return recipesFiltered;
   }
 
@@ -81,7 +103,7 @@ class Dropdown {
         }
       });
     }
-    Dropdown.displayFilteredRecipes(recipesFiltered);
+    FilterRecipesMainSearch.displayRecipes(recipesFiltered);
     return recipesFiltered;
   }
 
@@ -89,9 +111,11 @@ class Dropdown {
   createDropdown(value) {
     const $wrapper = document.createElement("li");
     const valuesList = `
-      <a class="dropdown-item" href="#" id="${value}"> ${value}  </a>
+      <a class="dropdown-item px-0" href="#" id="${value}"> ${value}  </a>
       `;
     $wrapper.innerHTML = valuesList;
+
+    this.searchDropdown();
     return $wrapper;
   }
 }
