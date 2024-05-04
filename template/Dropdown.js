@@ -12,41 +12,33 @@ class Dropdown {
     // ARRVALUES = INGREDIENTS LIST IN THE DROPDOWN
     const arrValues = [];
     const nodeList = document.querySelectorAll("#List1 li a");
+
     nodeList.forEach((node) => {
       let nodeValue = node.innerText.trim();
       arrValues.push(nodeValue);
     });
 
-    // SWITCH TOGGLEISACTIVE TO SUBMIT
+    // SWITCH TOGGLEISACTIVE TO SUBMIT ✅
     search.addEventListener("submit", (e) => {
-      // console.log("search", search, "✅");
       e.preventDefault();
 
       const searchValue = Utils.strNoAccent(
         search.querySelector("input").value
       );
-      // console.log("searchValue", searchValue, "✅");
+
       arrValues.forEach((value, index) => {
-        // NE MATCHE PAS SUR LES MOTS COMPOSE (MATCH ET INCLUDES PARTENT EN BOUCLE INFINIE)
-        if (value.toLowerCase() === searchValue.toLowerCase()) {
-          // console.log(value.toLowerCase(), searchValue.toLowerCase());
+        const val = Utils.strNoAccent(value.toLowerCase());
+        if (val === searchValue) {
           const node = nodeList[index];
           const recipesData = this.recipe;
-          // console.log("node", node);
-
-          // const tag = new TagList();
-          console.log(this.dropdown);
           this.dropdown.toggleIsActive(node, recipesData, "ingr");
-          console.log("dropdown", this.dropdown);
-          // console.log(value, this.recipe, "✅");
           search.querySelector("input").value = "";
         }
-        return;
       });
     });
   }
 
-  // MEP FILTER ON RECIPESDATA TO DISPLAY RECIPES BY INGREDIENT TAG
+  // MEP FILTER ON RECIPESDATA TO DISPLAY RECIPES BY INGREDIENT TAG ✅
   static filteredRecipesByIngredient(arr, recipes) {
     console.log("ingredients", arr.length);
     const recipesFiltered = [];
@@ -59,11 +51,13 @@ class Dropdown {
             (recipeIngredient) => recipeIngredient.ingredient === ingredient
           )
         ) {
+          // console.log("dropdown", ingredient, "✅");
           allValuesPresent = false;
           break;
         }
       }
       if (allValuesPresent) {
+        // console.log("dropdownMatch", recipe, "✅");
         recipesFiltered.push(recipe);
       }
     }

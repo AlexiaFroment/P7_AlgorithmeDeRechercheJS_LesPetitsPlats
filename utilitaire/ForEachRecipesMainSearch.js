@@ -6,31 +6,38 @@ class ForEachRecipesMainSearch {
 
   //   UPDATE VALUES DROPDOWN ON RECIPES FILTERED
   static updateDropdownIngredients(arr) {
-    // const tagDiv = document.querySelector("#tag");
+    // console.log("tableau de 50 recettes", arr, "✅");
+    // I GET THE TABLES OF INGREDIENTS COMPARED TO THE FILTERED RECIPES
     const filteredArr = arr.map((el) => el.ingredients);
+    // console.log("ingredients_update", filteredArr, "✅");
 
+    // I UPDATE INGREDIENTS LIST
     let list1 = [];
     filteredArr.forEach((ingredient) => {
       for (let i = 0; i < ingredient.length; i++) {
         list1.push(ingredient[i].ingredient);
       }
     });
+    console.log(
+      "liste d'ingredients UNIQUE dans le dropdown 🥕",
+      list1.length,
+      "✅"
+    );
 
     let capitalizeList1 = list1.map((el) => Utils.capitalize(el));
     Utils.sortArr(capitalizeList1);
     const uniqList = Utils.uniqItem(capitalizeList1);
 
+    // I UPDATE THE DROPDOWN LIST BY CREATING A NEW DROPDOWN
     const btn1 = document.getElementById("List1");
     btn1.innerHTML = "";
-
     uniqList.forEach((ingredient) => {
       const template = new Dropdown(arr, ingredient);
       btn1.appendChild(template.createDropdown(ingredient));
     });
 
+    // SELECT A ITEM TO CLICK
     let List1 = document.querySelectorAll("#List1 li");
-    console.log(arr, list1);
-
     List1.forEach((item) => {
       item.addEventListener("click", (e) => {
         e.preventDefault();
@@ -40,20 +47,31 @@ class ForEachRecipesMainSearch {
   }
 
   static updateDropdownAppliances(arr) {
+    // I GET THE TABLES OF APPLIANCES COMPARED TO THE FILTERED RECIPES
+    // console.log("arr", arr);
     const filteredArr = arr.map((el) => el.appliance);
+    // console.log("appliances_update", filteredArr, "✅");
+
+    // I UPDATE APPLIANCES LIST
     let capitalizeList2 = filteredArr.map((el) => Utils.capitalize(el));
     Utils.sortArr(capitalizeList2);
 
     let uniqList = Utils.uniqItem(filteredArr);
+    console.log(
+      "liste d'appareils UNIQUE dans le dropdown 🌞",
+      uniqList.length,
+      "✅"
+    );
 
+    // I UPDATE THE DROPDOWN LIST BY CREATING A NEW DROPDOWN
     const btn2 = document.getElementById("List2");
     btn2.innerHTML = "";
-
     uniqList.forEach((appliance) => {
       const template = new Dropdown(arr, null, appliance);
       btn2.appendChild(template.createDropdown(appliance));
     });
 
+    // SELECT A ITEM TO CLICK
     let List2 = document.querySelectorAll("#List2 li");
     List2.forEach((item) => {
       item.addEventListener("click", (e) => {
@@ -64,19 +82,27 @@ class ForEachRecipesMainSearch {
   }
 
   static updateDropdownUstensils(arr) {
+    // I GET THE TABLES OF USTENSILS COMPARED TO THE FILTERED RECIPES
     const filteredArr = arr.map((el) => el.ustensils);
 
+    // I UPDATE USTENSILS LIST
     let list3 = [];
     filteredArr.forEach((ustensil) => {
       for (let i = 0; i < ustensil.length; i++) {
         list3.push(ustensil[i]);
       }
     });
+    console.log(
+      "liste d'ustensils UNIQUE dans le dropdown 🍳",
+      list3.length,
+      "✅"
+    );
 
     let capitalizeList3 = list3.map((el) => Utils.capitalize(el));
     Utils.sortArr(capitalizeList3);
     let uniqList = Utils.uniqItem(capitalizeList3);
 
+    // I UPDATE THE DROPDOWN LIST BY CREATING A NEW DROPDOWN
     const btn3 = document.getElementById("List3");
     btn3.innerHTML = "";
     uniqList.forEach((ustensil) => {
@@ -84,6 +110,7 @@ class ForEachRecipesMainSearch {
       btn3.appendChild(template.createDropdown(ustensil));
     });
 
+    // SELECT A ITEM TO CLICK
     let List3 = document.querySelectorAll("#List3 li");
     List3.forEach((item) => {
       item.addEventListener("click", (e) => {
@@ -117,6 +144,7 @@ class ForEachRecipesMainSearch {
     const recipesSection = document.querySelector("#recipe");
     const numberOfRecipes = document.querySelector("#number_recipes");
 
+    // SORT BY RECIPE NAME ✅
     Utils.sortLocaleCompare(arr);
     // console.log("localcompare", arr, "✅");
 
@@ -133,37 +161,40 @@ class ForEachRecipesMainSearch {
 
       if (startToSearch) {
         arr.filter((recipeData) => {
-          // console.log("arr", arr, "recipeData", recipeData, "✅");
-          // Recipe_name convert without accent and toLowerCase() and check it matches with the searchItem
-          const nameStandardised = Utils.strNoAccent(
-            recipeData.name.toLowerCase()
-          );
           // SORT BY NAME ✅
-          const name = nameStandardised.includes(searchedItem);
+          const name = () => {
+            const nameStandardised = Utils.strNoAccent(
+              recipeData.name.toLowerCase()
+            );
+            if (nameStandardised.match(searchedItem)) {
+              return true;
+            }
+          };
 
-          // SORT BY INGREDIENTS
-          // Convert all ingredients without accent, toLowerCase() and check it matches with the searchItem
+          // SORT BY INGREDIENTS => NE FONCTIONNE PAS SUR LES MOTS COMPOSES ❌
           const ingredient = () => {
-            let ingr = "";
-            arr.forEach((recipeData) => {
-              // console.log("recipe", recipe, "✅");
-              recipeData.ingredients.forEach((ingredient) => {
-                ingr = Utils.strNoAccent(ingredient.ingredient.toLowerCase());
+            arr.forEach((recipe) => {
+              let matchingValue = recipe.ingredients.some((el) => {
+                let ingr = Utils.strNoAccent(el.ingredient.toLowerCase());
+                let search = Utils.strNoAccent(searchedItem.toLowerCase());
+                // return ingr === search;
+                return ingr.match(search);
               });
-              console.log("ingr_forEach", ingr, "ingredient", "✅");
-              if (ingr.match(searchedItem)) {
-                console.log("match", ingr, searchedItem, "🎉");
-                return ingr;
+              if (matchingValue) {
+                return matchingValue;
               }
             });
           };
 
+          // SORT BY DESCRIPTION ✅
+          const regex = new RegExp(searchedItem, "gi");
           const descriptionStandardised = Utils.strNoAccent(
             recipeData.description.toLowerCase()
           );
-          const description = descriptionStandardised.includes(searchedItem);
+          const description = regex.exec(descriptionStandardised);
+          console.log("description", description);
 
-          if (ingredient()) {
+          if (name() || ingredient() || description) {
             filteredRecipeData.push(recipeData);
           }
         });

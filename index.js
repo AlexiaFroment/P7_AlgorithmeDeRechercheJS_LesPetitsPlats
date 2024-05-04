@@ -8,8 +8,8 @@ class Index {
   async filterRecipes() {
     const recipesData = await this.recipesApi.get();
     const recipesDataFilter = [...recipesData];
+    // ForEachRecipesMainSearch.filterRecipesByInput(recipesDataFilter);
     FilterRecipesMainSearch.filterRecipesByInput(recipesDataFilter);
-    // FilterRecipesMainSearch.filterRecipesByInput(recipesDataFilter);
   }
 
   // CREATE INGREDIENTS DROPDOWN
@@ -18,8 +18,6 @@ class Index {
     const recipesData = await this.recipesApi.get();
     const arrRecipes = [...recipesData];
 
-    FilterRecipesMainSearch.updateDropdownIngredients(arrRecipes);
-
     let List1 = document.querySelectorAll("#List1 li");
     List1.forEach((item) => {
       item.addEventListener("click", (e) => {
@@ -27,6 +25,8 @@ class Index {
         this.dropdown.toggleIsActive(e, recipesData, "ingr");
       });
     });
+
+    FilterRecipesMainSearch.updateDropdownIngredients(arrRecipes);
   }
 
   // CREATE APPLIANCE DROPDOWN

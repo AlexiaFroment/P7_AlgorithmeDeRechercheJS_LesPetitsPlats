@@ -10,6 +10,7 @@ class TagList {
 
   // DISTRIBUTION OF TAGS BY CATEGORIES / DATA FILTERING ALWAYS IN THE SAME ORDER
   filteredTagList(arr, recipes) {
+    // console.log("LOGTEST", "✅", "sur search et au clic");
     let arrIngredient = [];
     let arrAppliance = [];
     let arrUstensil = [];
@@ -50,18 +51,21 @@ class TagList {
 
     let result = arrIngredient.concat(arrAppliance, arrUstensil);
 
-    console.log("resultNew", result);
+    // console.log("resultNew", result);
 
+    // console.log("coucou cestTOI 🥕⭐❌🍋✅🎉");
     if (arrIngredient.length === 0) {
+      // console.log("coucou cestmoi 🥕⭐❌🍋✅🎉");
       filteredRecipes = recipes;
       FilterRecipesMainSearch.displayRecipes(filteredRecipes);
     } else {
+      // console.log("coucou 🥕⭐❌🍋✅🎉");
       filteredRecipes = Dropdown.filteredRecipesByIngredient(
         arrIngredient,
         recipes
       );
       // FilterRecipesMainSearch.updateDropdownIngredients(filteredRecipes);
-      console.log(result, filteredRecipes);
+      // console.log(result, filteredRecipes);
       FilterRecipesMainSearch.updateDropdownIngredients(filteredRecipes);
       FilterRecipesMainSearch.updateDropdownAppliances(filteredRecipes);
       FilterRecipesMainSearch.updateDropdownUstensils(filteredRecipes);
@@ -111,8 +115,8 @@ class TagList {
   // }
 
   // ADD AND REMOVE ACTIVE ON EACH DROPDOWN VALUE
+
   toggleIsActive(arg, recipes, type) {
-    console.log("toggleIsActive", recipes);
     // e.preventDefault();
 
     // ADD TAG IN DOM
@@ -123,50 +127,54 @@ class TagList {
     } else {
       value = arg;
     }
-    // console.log("value_node", value, "✅");
+    // console.log(
+    //   "value_node",
+    //   value,
+    //   "✅",
+    //   "OK click et submit=> même comportement"
+    // );
 
     value.classList.toggle("active");
     let valueId = value.id;
-    console.log("valueId_value", valueId, type, "✅");
-    console.log("this_arr", this.arr);
+    console.log(
+      "valueId_value",
+      valueId,
+      type,
+      "✅",
+      "OK click et submit=> même comportement"
+    );
+    // console.log(
+    //   "this_arr",
+    //   this.arr,
+    //   "✅",
+    //   "OK click et submit=> même comportement"
+    // );
 
     // CONTROLE SI LA VALEUR EXISTE DEJA DANS LE TABLEAU DE VALEURS
-    const valueExists = this.arr.some(
+    console.log("contexte de this avant la condition :", this);
+    console.log("valueExist", valueId, type);
+    let valueExists = this.arr.some(
       (value) => value.valueId === valueId && value.type === type
     );
+    console.log("valueExist", valueId, type, valueExists);
 
     if (!valueExists) {
       this.arr.push({ valueId, type });
-      console.log(
-        "arr",
-        this.arr,
-        valueId,
-        type,
-        recipes,
-        "✅click_plsrsValeurs",
-        "❌search_plsrsValeurs"
-      );
+      console.log("contexte de this dans la condition :", this);
+      console.log("valueID🌞", valueId);
       tagDiv.innerHTML = "";
     }
+    console.log("thisArr", this.arr);
 
     this.arr.forEach((val, index) => {
-      console.log(
-        "arr_index",
-        val,
-        index,
-        recipes,
-        "✅index_plsrsValeurs",
-        "❌dropdown_plsrsValeurs"
-      );
       const tag = this.createTag(val.valueId, val.type);
-      // console.log("tag", tag, "✅");
       tagDiv.appendChild(tag);
 
       const closeBtnId = this.fixId(val.valueId);
-      console.log("closeBtnId", closeBtnId);
+      // console.log("closeBtnId", closeBtnId);
       const closeBtn = document.getElementById(closeBtnId);
       closeBtn.dataset.index = index;
-      console.log("closeBtnIndex", closeBtn);
+      // console.log("closeBtnIndex", closeBtn);
 
       // closeBtn.addEventListener("click", () =>
       //   this.deleteTagInDom(this.closeBtnId, this.closeBtn)
@@ -174,7 +182,7 @@ class TagList {
 
       const that = this;
       closeBtn.addEventListener("click", function () {
-        console.log("arr", that.arr);
+        // console.log("arr", that.arr);
         const currentIndex = Number(this.dataset.index);
         that.arr.splice(currentIndex, 1);
 
@@ -189,9 +197,9 @@ class TagList {
         value.classList.remove("active");
         this.parentNode.remove();
 
-        console.log("before", that.arr, recipes);
+        // console.log("before", that.arr, recipes);
         that.deleteTag(that.arr, recipes);
-        console.log("after", that.arr, recipes);
+        // console.log("after", that.arr, recipes);
 
         // that.filteredTagList(that.arr, recipes);
         // console.log("that_arr", that.arr, recipes);
@@ -201,10 +209,11 @@ class TagList {
         // console.log("sup_recipes_V2", that.arr, recipes);
       });
     });
-    console.log("this_arr", this.arr);
+    // console.log("this_arr", this.arr);
     this.filteredTagList(this.arr, recipes, index);
   }
 
+  // PAS DE RAPPEL SUR CETTE FONCTION ❌
   deleteTag(arr, recipes) {
     this.filteredTagList(arr, recipes);
     FilterRecipesMainSearch.updateDropdownIngredients(recipes);
