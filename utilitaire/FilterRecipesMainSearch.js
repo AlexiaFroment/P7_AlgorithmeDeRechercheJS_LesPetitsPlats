@@ -5,10 +5,15 @@ class FilterRecipesMainSearch {
   }
 
   //   UPDATE VALUES DROPDOWN ON RECIPES FILTERED
-  static updateDropdownIngredients(arr) {
-    // console.log("tableau de 50 recettes", arr, "✅");
+  static updateAllDropdowns(recipes) {
+    FilterRecipesMainSearch.updateDropdownIngredients(recipes);
+    FilterRecipesMainSearch.updateDropdownAppliances(recipes);
+    FilterRecipesMainSearch.updateDropdownUstensils(recipes);
+  }
+  static updateDropdownIngredients(recipes) {
+    // console.log("tableau de 50 recettes", recipes, "✅");
     // I GET THE TABLES OF INGREDIENTS COMPARED TO THE FILTERED RECIPES
-    const filteredArr = arr.map((el) => el.ingredients);
+    const filteredArr = recipes.map((el) => el.ingredients);
     // console.log("ingredients_update", filteredArr, "✅");
 
     // I UPDATE INGREDIENTS LIST
@@ -19,6 +24,7 @@ class FilterRecipesMainSearch {
       }
     });
     console.log(
+      "en cours",
       "liste d'ingredients UNIQUE dans le dropdown 🥕",
       list1.length,
       "✅"
@@ -32,7 +38,7 @@ class FilterRecipesMainSearch {
     const btn1 = document.getElementById("List1");
     btn1.innerHTML = "";
     uniqList.forEach((ingredient) => {
-      const template = new Dropdown(arr, ingredient);
+      const template = new Dropdown(recipes, ingredient);
       btn1.appendChild(template.createDropdown(ingredient));
     });
 
@@ -41,15 +47,14 @@ class FilterRecipesMainSearch {
     List1.forEach((item) => {
       item.addEventListener("click", (e) => {
         e.preventDefault();
-        this.dropdown.toggleIsActive(e, arr, "ingr");
+        this.dropdown.toggleIsActive(e, recipes, "ingr");
       });
     });
   }
 
-  static updateDropdownAppliances(arr) {
+  static updateDropdownAppliances(recipes) {
     // I GET THE TABLES OF APPLIANCES COMPARED TO THE FILTERED RECIPES
-    // console.log("arr", arr);
-    const filteredArr = arr.map((el) => el.appliance);
+    const filteredArr = recipes.map((el) => el.appliance);
     // console.log("appliances_update", filteredArr, "✅");
 
     // I UPDATE APPLIANCES LIST
@@ -57,17 +62,17 @@ class FilterRecipesMainSearch {
     Utils.sortArr(capitalizeList2);
 
     let uniqList = Utils.uniqItem(filteredArr);
-    // console.log(
-    //   "liste d'appareils UNIQUE dans le dropdown 🌞",
-    //   uniqList.length,
-    //   "✅"
-    // );
+    console.log(
+      "liste d'appareils UNIQUE dans le dropdown 🌞",
+      uniqList.length,
+      "✅"
+    );
 
     // I UPDATE THE DROPDOWN LIST BY CREATING A NEW DROPDOWN
     const btn2 = document.getElementById("List2");
     btn2.innerHTML = "";
     uniqList.forEach((appliance) => {
-      const template = new Dropdown(arr, null, appliance);
+      const template = new Dropdown(recipes, null, appliance);
       btn2.appendChild(template.createDropdown(appliance));
     });
 
@@ -76,14 +81,14 @@ class FilterRecipesMainSearch {
     List2.forEach((item) => {
       item.addEventListener("click", (e) => {
         e.preventDefault();
-        this.dropdown.toggleIsActive(e, arr, "app");
+        this.dropdown.toggleIsActive(e, recipes, "app");
       });
     });
   }
 
-  static updateDropdownUstensils(arr) {
+  static updateDropdownUstensils(recipes) {
     // I GET THE TABLES OF USTENSILS COMPARED TO THE FILTERED RECIPES
-    const filteredArr = arr.map((el) => el.ustensils);
+    const filteredArr = recipes.map((el) => el.ustensils);
 
     // I UPDATE USTENSILS LIST
     let list3 = [];
@@ -92,11 +97,11 @@ class FilterRecipesMainSearch {
         list3.push(ustensil[i]);
       }
     });
-    // console.log(
-    //   "liste d'ustensils UNIQUE dans le dropdown 🍳",
-    //   list3.length,
-    //   "✅"
-    // );
+    console.log(
+      "liste d'ustensils UNIQUE dans le dropdown 🍳",
+      list3.length,
+      "✅"
+    );
 
     let capitalizeList3 = list3.map((el) => Utils.capitalize(el));
     Utils.sortArr(capitalizeList3);
@@ -106,7 +111,7 @@ class FilterRecipesMainSearch {
     const btn3 = document.getElementById("List3");
     btn3.innerHTML = "";
     uniqList.forEach((ustensil) => {
-      const template = new Dropdown(arr, null, null, ustensil);
+      const template = new Dropdown(recipes, null, null, ustensil);
       btn3.appendChild(template.createDropdown(ustensil));
     });
 
@@ -115,17 +120,17 @@ class FilterRecipesMainSearch {
     List3.forEach((item) => {
       item.addEventListener("click", (e) => {
         e.preventDefault();
-        this.dropdown.toggleIsActive(e, arr, "ust");
+        this.dropdown.toggleIsActive(e, recipes, "ust");
       });
     });
   }
 
   // DISPLAY RECIPES FILTERED
-  static displayRecipes(arr) {
+  static displayRecipes(recipes) {
     const numberOfRecipes = document.getElementById("number_recipes");
     const recipesCards = document.getElementById("recipe");
 
-    const number = arr.length;
+    const number = recipes.length;
 
     numberOfRecipes.innerHTML = "";
     recipesCards.innerHTML = "";
@@ -133,21 +138,23 @@ class FilterRecipesMainSearch {
     const templateCount = new List();
     numberOfRecipes.appendChild(templateCount.createCountList(number));
 
-    arr.forEach((recipe) => {
+    recipes.forEach((recipe) => {
       const templateCard = new RecipeCard(recipe);
       recipesCards.appendChild(templateCard.createRecipeCard());
     });
   }
 
-  static filterRecipesByInput(arr) {
+  static filterRecipesByInput(recipes) {
     const searchInput = document.querySelector(".search_input");
     const recipesSection = document.querySelector("#recipe");
     const numberOfRecipes = document.querySelector("#number_recipes");
 
     // SORT BY NAME ✅
-    Utils.sortArrByKey(arr, "name");
+    const originalArr = [...recipes];
+    Utils.sortArrByKey(recipes, "name");
 
     searchInput.addEventListener("input", (e) => {
+      e.preventDefault();
       // Delete current DOM
       recipesSection.innerHTML = "";
       numberOfRecipes.innerHTML = "";
@@ -159,7 +166,7 @@ class FilterRecipesMainSearch {
       let filteredRecipeData = [];
 
       if (startToSearch) {
-        arr.filter((recipeData) => {
+        recipes.filter((recipeData) => {
           // SORT BY NAME ✅
           // Recipe_name convert without accent and toLowerCase() and check it matches with the searchItem
           const nameStandardised = Utils.strNoAccent(
@@ -193,19 +200,18 @@ class FilterRecipesMainSearch {
           }
         });
       } else {
-        filteredRecipeData = arr;
+        filteredRecipeData = originalArr;
       }
 
       // Create new DOM with filtered data
       const number = filteredRecipeData.length;
 
       if (number === 50) {
-        FilterRecipesMainSearch.displayRecipes(arr);
+        FilterRecipesMainSearch.displayRecipes(originalArr);
+        FilterRecipesMainSearch.updateAllDropdowns(originalArr);
       } else {
         FilterRecipesMainSearch.displayRecipes(filteredRecipeData);
-        FilterRecipesMainSearch.updateDropdownIngredients(filteredRecipeData);
-        FilterRecipesMainSearch.updateDropdownAppliances(filteredRecipeData);
-        FilterRecipesMainSearch.updateDropdownUstensils(filteredRecipeData);
+        FilterRecipesMainSearch.updateAllDropdowns(filteredRecipeData);
       }
     });
   }

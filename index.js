@@ -5,16 +5,17 @@ class Index {
     this.dropdown = new TagList();
   }
 
+  // 2 METHODS TO FILTER RECIPES ON THE INPUT MAIN SEARCH
   async filterRecipes() {
     const recipesData = await this.recipesApi.get();
     const recipesDataFilter = [...recipesData];
-    // ForEachRecipesMainSearch.filterRecipesByInput(recipesDataFilter);
     FilterRecipesMainSearch.filterRecipesByInput(recipesDataFilter);
+    // SecondMethodFilterRecipesMainSearch.filterRecipesByInput(recipesDataFilter);
   }
 
   // CREATE INGREDIENTS DROPDOWN
   async ingredients() {
-    console.log(this.dropdown);
+    // console.log(this.dropdown);
     const recipesData = await this.recipesApi.get();
     const arrRecipes = [...recipesData];
 
