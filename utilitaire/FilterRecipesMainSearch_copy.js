@@ -11,7 +11,8 @@ class FilterRecipesMainSearch {
     FilterRecipesMainSearch.DropdownUstensils(recipes);
   }
   static DropdownIngredients(recipes) {
-    const filteredArr = recipes.map((el) => el.ingredients);
+    const originalArr = [...recipes];
+    const filteredArr = originalArr.map((el) => el.ingredients);
 
     let list1 = [];
     filteredArr.forEach((ingredient) => {
@@ -19,15 +20,16 @@ class FilterRecipesMainSearch {
         list1.push(ingredient[i].ingredient);
       }
     });
+    console.log(
+      "en cours",
+      "liste d'ingredients UNIQUE dans le dropdown 🥕",
+      list1.length,
+      "✅"
+    );
 
     let capitalizeList1 = list1.map((el) => Utils.capitalize(el));
     Utils.sortArr(capitalizeList1);
     const uniqList = Utils.uniqItem(capitalizeList1);
-    console.log(
-      "liste d'ingredients UNIQUE dans le dropdown 🥕",
-      uniqList.length,
-      "✅"
-    );
 
     const btn1 = document.getElementById("List1");
     btn1.innerHTML = "";
@@ -48,13 +50,13 @@ class FilterRecipesMainSearch {
   static DropdownAppliances(recipes) {
     // I GET THE TABLES OF APPLIANCES COMPARED TO THE FILTERED RECIPES
     const filteredArr = recipes.map((el) => el.appliance);
+    // console.log("appliances_update", filteredArr, "✅");
 
     // I UPDATE APPLIANCES LIST
     let capitalizeList2 = filteredArr.map((el) => Utils.capitalize(el));
     Utils.sortArr(capitalizeList2);
 
     let uniqList = Utils.uniqItem(filteredArr);
-
     console.log(
       "liste d'appareils UNIQUE dans le dropdown 🌞",
       uniqList.length,
@@ -90,15 +92,15 @@ class FilterRecipesMainSearch {
         list3.push(ustensil[i]);
       }
     });
+    console.log(
+      "liste d'ustensils UNIQUE dans le dropdown 🍳",
+      list3.length,
+      "✅"
+    );
 
     let capitalizeList3 = list3.map((el) => Utils.capitalize(el));
     Utils.sortArr(capitalizeList3);
     let uniqList = Utils.uniqItem(capitalizeList3);
-    console.log(
-      "liste d'ustensils UNIQUE dans le dropdown 🍳",
-      uniqList.length,
-      "✅"
-    );
 
     // I UPDATE THE DROPDOWN LIST BY CREATING A NEW DROPDOWN
     const btn3 = document.getElementById("List3");

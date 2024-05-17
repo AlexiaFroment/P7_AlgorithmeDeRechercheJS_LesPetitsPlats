@@ -20,6 +20,7 @@ class Index {
     List1.forEach((item) => {
       item.addEventListener("click", (e) => {
         e.preventDefault();
+        console.log("ingredient", recipesData);
         this.dropdown.toggleIsActive(e, recipesData, "ingr");
       });
     });

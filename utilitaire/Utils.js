@@ -1,6 +1,7 @@
 class Utils {
   static capitalize(word) {
-    const capitalize = word.charAt(0).toUpperCase() + word.slice(1);
+    const capitalize =
+      word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
     return capitalize;
   }
 

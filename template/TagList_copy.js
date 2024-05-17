@@ -58,11 +58,11 @@ class TagList {
         arrIngredient,
         recipes
       );
-      // FilterRecipesMainSearch.updateDropdownIngredients(filteredRecipes);
+      // FilterRecipesMainSearch.DropdownIngredients(filteredRecipes);
       // console.log(result, filteredRecipes);
-      FilterRecipesMainSearch.updateDropdownIngredients(filteredRecipes);
-      FilterRecipesMainSearch.updateDropdownAppliances(filteredRecipes);
-      FilterRecipesMainSearch.updateDropdownUstensils(filteredRecipes);
+      Dropdown.DropdownIngredients(filteredRecipes);
+      Dropdown.DropdownAppliances(filteredRecipes);
+      Dropdown.DropdownUstensils(filteredRecipes);
     }
 
     // if (arrAppliance.length > 0) {

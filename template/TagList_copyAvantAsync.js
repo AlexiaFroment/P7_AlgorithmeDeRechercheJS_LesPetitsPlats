@@ -1,16 +1,14 @@
 class TagList {
   constructor() {
     this.arr = [];
-    this.recipesApi = new ApiRecipes("../data/recipes.json");
   }
 
-  async filteredTagList(arr, recipes) {
-    const recipeData = await this.recipesApi.get();
-    // console.log("recipeDataAPI❌", recipeData, "✅");
-
+  filteredTagList(arr, recipes) {
+    console.log("filteredTagList", arr, "✅");
+    const originalArr = [...recipes];
+    let arrIngredient = [];
     let arrAppliance = [];
     let arrUstensil = [];
-    let arrIngredient = [];
 
     arr.forEach((val) => {
       // INGREDIENTS
@@ -49,42 +47,31 @@ class TagList {
     // console.log("arrX3", arrIngredient, arrAppliance, arrUstensil);
 
     let result = [...arrIngredient, ...arrAppliance, ...arrUstensil];
-    console.log("result", result);
+    // console.log("result", result);
 
     if (result.length === 0) {
-      console.log("ZERO", this.recipesApi);
-      FilterRecipesMainSearch.displayRecipes(recipeData);
-      FilterRecipesMainSearch.updateAllDropdowns(recipeData);
+      FilterRecipesMainSearch.displayRecipes(originalArr);
+      FilterRecipesMainSearch.updateAllDropdowns(originalArr);
+      console.log("originalArr", originalArr);
     } else {
-      let filteredRecipes = recipeData;
-      // filteredRecipes = Dropdown.filteredRecipesByIngredient(
-      //   arrIngredient,
-      //   filteredRecipes
-      // );
-      // Dropdown.filteredRecipesByAppliance(arrAppliance, filteredRecipes);
-      // Dropdown.filteredRecipesByUstensil(arrUstensil, filteredRecipes);
-
       let filteredIngredient = Dropdown.filteredRecipesByIngredient(
         arrIngredient,
-        recipeData
+        recipes
       );
-      // console.log("filteredIngredient🖐🏼", filteredIngredient);
       let filteredAppliance = Dropdown.filteredRecipesByAppliance(
         arrAppliance,
         filteredIngredient
       );
-      // console.log("object filteredAppliance🖐🏼", filteredAppliance);
       let filteredUstensil = Dropdown.filteredRecipesByUstensil(
         arrUstensil,
         filteredAppliance
       );
-      // console.log("filteredUstensil🖐🏼", filteredUstensil);
-
-      filteredRecipes = filteredIngredient;
-
-      console.log("filteredRecipes🖐🏼", filteredRecipes);
-
-      // return filteredRecipes;
+      let filteredRecipes = [
+        ...filteredIngredient,
+        ...filteredAppliance,
+        ...filteredUstensil,
+      ];
+      return filteredRecipes;
 
       // console.log(
       //   "filter🖐🏼",
@@ -98,18 +85,18 @@ class TagList {
 
   // DELETE TAG IN DOM
   deleteTagInDOM(id, recipes, value, e) {
+    console.log("deleteTagInDOM", id, this.arr, value);
     e.preventDefault();
     const index = this.arr.findIndex((tag) => Utils.fixId(tag.valueId) === id); // tag.valueId === id);
     if (index !== -1) {
       this.arr.splice(index, 1);
-      this.updateCloseBtn(recipes, value);
       this.updateTagDisplay(recipes);
     }
   }
   // UPDATE CLOSE BTN WHEN I DELETE TAG IN DOM
   updateCloseBtn(recipes, value) {
     const closeButtons = document.querySelectorAll(".close");
-    // console.log("closeButtons❌", closeButtons, "✅");
+    console.log("closeButtons", closeButtons, "✅");
     closeButtons.forEach((closeBtn) => {
       const id = closeBtn.id;
       closeBtn.removeEventListener("click", this.deleteTagInDOM.bind);
@@ -117,6 +104,7 @@ class TagList {
         this.deleteTagInDOM(id, recipes, value, e)
       );
     });
+    // console.log("closeButtons", closeButtons, "✅");
   }
   // DISPLAY TAG IN DOM
   updateTagDisplay(recipes, value) {
@@ -147,6 +135,8 @@ class TagList {
     if (!tagExists) {
       this.arr.push({ valueId, type });
     }
+
+    console.log("VALUE", value, valueId, type, this.arr, "✅");
 
     this.updateTagDisplay(recipes, value);
   }

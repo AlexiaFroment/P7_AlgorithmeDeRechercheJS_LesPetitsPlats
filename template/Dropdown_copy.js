@@ -70,15 +70,15 @@ class Dropdown {
   }
   // MEP FILTER ON RECIPESDATA TO DISPLAY RECIPES BY INGREDIENT TAG ✅
   static filteredRecipesByIngredient(arr, recipes) {
-    // console.log("ingredients", arr.length, recipes);
+    console.log("ingredients", arr.length, recipes);
     const recipesFiltered = [];
-    // console.log(
-    //   "recipesFiltered",
-    //   recipes,
-    //   recipesFiltered,
-    //   "liste des recettes filtrées",
-    //   "✅"
-    // );
+    console.log(
+      "recipesFiltered",
+      recipes,
+      recipesFiltered,
+      "liste des recettes filtrées",
+      "✅"
+    );
 
     for (let recipe of recipes) {
       let allValuesPresent = true;
@@ -97,7 +97,7 @@ class Dropdown {
         recipesFiltered.push(recipe);
       }
     }
-    FilterRecipesMainSearch.DropdownIngredients(recipesFiltered);
+    FilterRecipesMainSearch.updateAllDropdowns(recipesFiltered);
     FilterRecipesMainSearch.displayRecipes(recipesFiltered);
     return recipesFiltered;
   }
@@ -106,7 +106,7 @@ class Dropdown {
     const recipesFiltered = recipes.filter((recipe) => {
       return arr.every((value) => recipe.appliance === value);
     });
-    FilterRecipesMainSearch.DropdownAppliances(recipesFiltered);
+    FilterRecipesMainSearch.updateAllDropdowns(recipesFiltered);
     FilterRecipesMainSearch.displayRecipes(recipesFiltered);
     return recipesFiltered;
   }
@@ -135,7 +135,7 @@ class Dropdown {
         }
       });
     }
-    FilterRecipesMainSearch.DropdownUstensils(recipesFiltered);
+    FilterRecipesMainSearch.updateAllDropdowns(recipesFiltered);
     FilterRecipesMainSearch.displayRecipes(recipesFiltered);
     return recipesFiltered;
   }
