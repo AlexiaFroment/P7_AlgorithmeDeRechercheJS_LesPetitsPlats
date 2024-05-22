@@ -52,7 +52,7 @@ class TagList {
     console.log("result", result);
 
     if (result.length === 0) {
-      console.log("ZERO", this.recipesApi);
+      // console.log("ZERO", this.recipesApi);
       FilterRecipesMainSearch.displayRecipes(recipeData);
       FilterRecipesMainSearch.updateAllDropdowns(recipeData);
     } else {
@@ -139,6 +139,7 @@ class TagList {
   }
   // ADD TAG IN DOM
   toggleIsActive(eventOrValue, recipes, type) {
+    console.log("this.arr", this.arr, "✅");
     const value =
       eventOrValue instanceof Event ? eventOrValue.target : eventOrValue;
     const valueId = value.id;
@@ -147,6 +148,8 @@ class TagList {
     if (!tagExists) {
       this.arr.push({ valueId, type });
     }
+
+    console.log("this.arr", this.arr, "✅");
 
     this.updateTagDisplay(recipes, value);
   }

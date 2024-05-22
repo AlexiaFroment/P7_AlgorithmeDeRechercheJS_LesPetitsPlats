@@ -1,11 +1,35 @@
 class Dropdown {
-  constructor(recipe, ingredient, appliance, ustensil) {
+  constructor(recipe, ingredient, appliance, ustensil, dropdown) {
     this.recipe = recipe;
     this.ingredient = ingredient;
     this.appliance = appliance;
     this.ustensil = ustensil;
-    this.dropdown = new TagList();
-    this.arr = [];
+    this.tagList = dropdown;
+    // this.dropdown = new TagList();
+    // this.arr = [];
+  }
+
+  handleSearchSubmit(search, nodeList, arrValues, e) {
+    e.preventDefault();
+    const recipes = this.recipe;
+    const searchValue = Utils.strNoAccent(search.querySelector("input").value);
+
+    arrValues.forEach((value, index) => {
+      const val = Utils.strNoAccent(value.toLowerCase());
+
+      if (val === searchValue) {
+        const node = nodeList[index];
+
+        this.tagList.toggleIsActive(node, recipes, "ingr");
+        // DELETE VALUE IN INPUT SEARCH
+        search.querySelector("input").value = "";
+        // CLOSE DROPDOWN MENU
+        const dropdown = document.querySelector(".dropdown-menu");
+        if (dropdown) {
+          dropdown.classList.remove("show");
+        }
+      }
+    });
   }
 
   searchDropdown() {
@@ -19,48 +43,10 @@ class Dropdown {
       arrValues.push(nodeValue);
     });
 
-    // console.log(
-    //   "arrValues",
-    //   arrValues,
-    //   "=> tableau avec toutes les valeurs du dropdown sous forme de string",
-    //   "✅"
-    // );
-
-    const dropdown = this.dropdown;
-    //   // SWITCH TOGGLEISACTIVE TO SUBMIT ✅
-    search.addEventListener("submit", function (e, dropdown) {
-      e.preventDefault();
-
-      const searchValue = Utils.strNoAccent(
-        search.querySelector("input").value
-      );
-
-      // console.log(
-      //   "searchValue",
-      //   searchValue,
-      //   "ingredient tapé dans l'input",
-      //   "✅"
-      // );
-      console.log("arrYAvantForEach", this.arr, "✅");
-
-      arrValues.forEach((value, index) => {
-        const val = Utils.strNoAccent(value.toLowerCase());
-
-        if (val === searchValue) {
-          console.log("match", val, searchValue, "✅");
-          const node = nodeList[index];
-          console.log("node", node, "✅");
-          console.log("arrYAvantPush", this.arr, "✅");
-
-          dropdown.toggleIsActive(node, this.recipe, "ingr", this.arr);
-
-          // console.log("node", node, this.recipe, "ingr", "✅");
-          console.log("arr", this.arr, "✅");
-          console.log("search", search);
-          search.querySelector("input").value = "";
-        }
-      });
-    });
+    search.addEventListener(
+      "submit",
+      this.handleSearchSubmit.bind(this, search, nodeList, arrValues)
+    );
   }
 
   static filteredRecipesByAllDropdowns(arr, recipes) {
@@ -152,3 +138,4 @@ class Dropdown {
     return $wrapper;
   }
 }
+v;

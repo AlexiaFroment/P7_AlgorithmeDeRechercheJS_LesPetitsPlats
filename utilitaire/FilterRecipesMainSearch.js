@@ -32,7 +32,13 @@ class FilterRecipesMainSearch {
     const btn1 = document.getElementById("List1");
     btn1.innerHTML = "";
     uniqList.forEach((ingredient) => {
-      const template = new Dropdown(recipes, ingredient);
+      const template = new Dropdown(
+        recipes,
+        ingredient,
+        null,
+        null,
+        this.dropdown
+      );
       btn1.appendChild(template.createDropdown(ingredient));
     });
 
@@ -40,6 +46,7 @@ class FilterRecipesMainSearch {
     List1.forEach((item) => {
       item.addEventListener("click", (e) => {
         e.preventDefault();
+        console.log("this.arr_DropdownIngredient", this.arr);
         this.dropdown.toggleIsActive(e, recipes, "ingr");
       });
     });
@@ -65,7 +72,13 @@ class FilterRecipesMainSearch {
     const btn2 = document.getElementById("List2");
     btn2.innerHTML = "";
     uniqList.forEach((appliance) => {
-      const template = new Dropdown(recipes, null, appliance);
+      const template = new Dropdown(
+        recipes,
+        null,
+        appliance,
+        null,
+        this.dropdown
+      );
       btn2.appendChild(template.createDropdown(appliance));
     });
 
@@ -104,7 +117,13 @@ class FilterRecipesMainSearch {
     const btn3 = document.getElementById("List3");
     btn3.innerHTML = "";
     uniqList.forEach((ustensil) => {
-      const template = new Dropdown(recipes, null, null, ustensil);
+      const template = new Dropdown(
+        recipes,
+        null,
+        null,
+        ustensil,
+        this.dropdown
+      );
       btn3.appendChild(template.createDropdown(ustensil));
     });
 
