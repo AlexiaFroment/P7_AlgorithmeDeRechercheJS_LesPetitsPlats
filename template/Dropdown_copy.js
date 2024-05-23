@@ -1,66 +1,52 @@
 class Dropdown {
-  constructor(recipe, ingredient, appliance, ustensil) {
+  constructor(recipe, ingredient, appliance, ustensil, dropdown) {
     this.recipe = recipe;
     this.ingredient = ingredient;
     this.appliance = appliance;
     this.ustensil = ustensil;
-    this.dropdown = new TagList();
-    this.arr = [];
+    this.tagList = dropdown;
+    // this.dropdown = new TagList();
+    // this.arr = [];
   }
 
-  searchDropdown() {
-    const search = document.getElementById("searchL1");
+  handleSearchSubmit(search, nodeList, arrValues, e) {
+    e.preventDefault();
+    const recipes = this.recipe;
+    const searchValue = Utils.strNoAccent(search.querySelector("input").value);
+
+    arrValues.forEach((value, index) => {
+      const val = Utils.strNoAccent(value.toLowerCase());
+
+      if (val === searchValue) {
+        const node = nodeList[index];
+
+        this.tagList.toggleIsActive(node, recipes, "ingr");
+        // DELETE VALUE IN INPUT SEARCH
+        search.querySelector("input").value = "";
+        // CLOSE DROPDOWN MENU
+        const dropdown = document.querySelector(".dropdown-menu");
+        if (dropdown) {
+          dropdown.classList.remove("show");
+        }
+      }
+    });
+  }
+
+  searchDropdown(searchId, listId) {
+    const search = document.getElementById(searchId);
     // ARRVALUES = INGREDIENTS LIST IN THE DROPDOWN
     const arrValues = [];
-    const nodeList = document.querySelectorAll("#List1 li a");
+    const nodeList = document.querySelectorAll(`#${listId} li a`);
 
     nodeList.forEach((node) => {
       let nodeValue = node.innerText.trim();
       arrValues.push(nodeValue);
     });
 
-    // console.log(
-    //   "arrValues",
-    //   arrValues,
-    //   "=> tableau avec toutes les valeurs du dropdown sous forme de string",
-    //   "✅"
-    // );
-
-    const dropdown = this.dropdown;
-    //   // SWITCH TOGGLEISACTIVE TO SUBMIT ✅
-    search.addEventListener("submit", function (e, dropdown) {
-      e.preventDefault();
-
-      const searchValue = Utils.strNoAccent(
-        search.querySelector("input").value
-      );
-
-      // console.log(
-      //   "searchValue",
-      //   searchValue,
-      //   "ingredient tapé dans l'input",
-      //   "✅"
-      // );
-      console.log("arrYAvantForEach", this.arr, "✅");
-
-      arrValues.forEach((value, index) => {
-        const val = Utils.strNoAccent(value.toLowerCase());
-
-        if (val === searchValue) {
-          console.log("match", val, searchValue, "✅");
-          const node = nodeList[index];
-          console.log("node", node, "✅");
-          console.log("arrYAvantPush", this.arr, "✅");
-
-          dropdown.toggleIsActive(node, this.recipe, "ingr", this.arr);
-
-          // console.log("node", node, this.recipe, "ingr", "✅");
-          console.log("arr", this.arr, "✅");
-          console.log("search", search);
-          search.querySelector("input").value = "";
-        }
-      });
-    });
+    search.addEventListener(
+      "submit",
+      this.handleSearchSubmit.bind(this, search, nodeList, arrValues)
+    );
   }
 
   static filteredRecipesByAllDropdowns(arr, recipes) {
@@ -70,15 +56,7 @@ class Dropdown {
   }
   // MEP FILTER ON RECIPESDATA TO DISPLAY RECIPES BY INGREDIENT TAG ✅
   static filteredRecipesByIngredient(arr, recipes) {
-    console.log("ingredients", arr.length, recipes);
     const recipesFiltered = [];
-    console.log(
-      "recipesFiltered",
-      recipes,
-      recipesFiltered,
-      "liste des recettes filtrées",
-      "✅"
-    );
 
     for (let recipe of recipes) {
       let allValuesPresent = true;
@@ -88,7 +66,6 @@ class Dropdown {
             (recipeIngredient) => recipeIngredient.ingredient === ingredient
           )
         ) {
-          // console.log("dropdown", ingredient, "✅");
           allValuesPresent = false;
           break;
         }
@@ -97,7 +74,8 @@ class Dropdown {
         recipesFiltered.push(recipe);
       }
     }
-    FilterRecipesMainSearch.updateAllDropdowns(recipesFiltered);
+
+    FilterRecipesMainSearch.DropdownIngredients(recipesFiltered);
     FilterRecipesMainSearch.displayRecipes(recipesFiltered);
     return recipesFiltered;
   }
@@ -106,7 +84,8 @@ class Dropdown {
     const recipesFiltered = recipes.filter((recipe) => {
       return arr.every((value) => recipe.appliance === value);
     });
-    FilterRecipesMainSearch.updateAllDropdowns(recipesFiltered);
+
+    FilterRecipesMainSearch.DropdownAppliances(recipesFiltered);
     FilterRecipesMainSearch.displayRecipes(recipesFiltered);
     return recipesFiltered;
   }
@@ -135,7 +114,7 @@ class Dropdown {
         }
       });
     }
-    FilterRecipesMainSearch.updateAllDropdowns(recipesFiltered);
+    FilterRecipesMainSearch.DropdownUstensils(recipesFiltered);
     FilterRecipesMainSearch.displayRecipes(recipesFiltered);
     return recipesFiltered;
   }
@@ -148,7 +127,7 @@ class Dropdown {
         `;
     $wrapper.innerHTML = valuesList;
 
-    this.searchDropdown();
+    this.searchDropdown("searchL1", "List1");
     return $wrapper;
   }
 }

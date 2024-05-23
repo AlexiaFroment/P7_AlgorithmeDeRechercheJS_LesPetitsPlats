@@ -13,6 +13,7 @@ class Dropdown {
     e.preventDefault();
     const recipes = this.recipe;
     const searchValue = Utils.strNoAccent(search.querySelector("input").value);
+    const searchId = search.id;
 
     arrValues.forEach((value, index) => {
       const val = Utils.strNoAccent(value.toLowerCase());
@@ -20,7 +21,14 @@ class Dropdown {
       if (val === searchValue) {
         const node = nodeList[index];
 
-        this.tagList.toggleIsActive(node, recipes, "ingr");
+        // MANAGE VALUE TO PASS IN TOGGLE
+        if (searchId === "searchL1") {
+          this.tagList.toggleIsActive(node, recipes, "ingr");
+        } else if (searchId === "searchL2") {
+          this.tagList.toggleIsActive(node, recipes, "app");
+        } else if (searchId === "searchL3") {
+          this.tagList.toggleIsActive(node, recipes, "ust");
+        }
         // DELETE VALUE IN INPUT SEARCH
         search.querySelector("input").value = "";
         // CLOSE DROPDOWN MENU
@@ -32,11 +40,11 @@ class Dropdown {
     });
   }
 
-  searchDropdown() {
-    const search = document.getElementById("searchL1");
+  searchDropdown(searchId, listId) {
+    const search = document.getElementById(searchId);
     // ARRVALUES = INGREDIENTS LIST IN THE DROPDOWN
     const arrValues = [];
-    const nodeList = document.querySelectorAll("#List1 li a");
+    const nodeList = document.querySelectorAll(`#${listId} li a`);
 
     nodeList.forEach((node) => {
       let nodeValue = node.innerText.trim();
@@ -56,15 +64,7 @@ class Dropdown {
   }
   // MEP FILTER ON RECIPESDATA TO DISPLAY RECIPES BY INGREDIENT TAG ✅
   static filteredRecipesByIngredient(arr, recipes) {
-    // console.log("ingredients", arr.length, recipes);
     const recipesFiltered = [];
-    // console.log(
-    //   "recipesFiltered",
-    //   recipes,
-    //   recipesFiltered,
-    //   "liste des recettes filtrées",
-    //   "✅"
-    // );
 
     for (let recipe of recipes) {
       let allValuesPresent = true;
@@ -74,7 +74,6 @@ class Dropdown {
             (recipeIngredient) => recipeIngredient.ingredient === ingredient
           )
         ) {
-          // console.log("dropdown", ingredient, "✅");
           allValuesPresent = false;
           break;
         }
@@ -83,6 +82,7 @@ class Dropdown {
         recipesFiltered.push(recipe);
       }
     }
+
     FilterRecipesMainSearch.DropdownIngredients(recipesFiltered);
     FilterRecipesMainSearch.displayRecipes(recipesFiltered);
     return recipesFiltered;
@@ -92,6 +92,7 @@ class Dropdown {
     const recipesFiltered = recipes.filter((recipe) => {
       return arr.every((value) => recipe.appliance === value);
     });
+
     FilterRecipesMainSearch.DropdownAppliances(recipesFiltered);
     FilterRecipesMainSearch.displayRecipes(recipesFiltered);
     return recipesFiltered;
@@ -134,8 +135,9 @@ class Dropdown {
         `;
     $wrapper.innerHTML = valuesList;
 
-    this.searchDropdown();
+    this.searchDropdown("searchL1", "List1");
+    this.searchDropdown("searchL2", "List2");
+    this.searchDropdown("searchL3", "List3");
     return $wrapper;
   }
 }
-v;
