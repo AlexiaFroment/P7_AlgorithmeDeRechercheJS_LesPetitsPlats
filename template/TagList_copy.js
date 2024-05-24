@@ -1,16 +1,18 @@
 class TagList {
   constructor() {
     this.arr = [];
+    this.recipesApi = new ApiRecipes("../data/recipes.json");
   }
 
-  filteredTagList(arr, recipes) {
-    const originalArr = [...recipes];
-    let arrIngredient = [];
+  async filteredTagList(arr, recipes) {
+    const recipeData = await this.recipesApi.get();
+    // console.log("recipeDataAPI❌", recipeData, "✅");
+
     let arrAppliance = [];
     let arrUstensil = [];
-    let filteredRecipes = [];
+    let arrIngredient = [];
 
-    this.arr.forEach((val) => {
+    arr.forEach((val) => {
       // INGREDIENTS
       for (let recipe of recipes) {
         for (let ingredient of recipe.ingredients) {
@@ -44,105 +46,118 @@ class TagList {
       }
     });
 
-    console.log("arrX3", arrIngredient, arrAppliance, arrUstensil);
-
     let result = [...arrIngredient, ...arrAppliance, ...arrUstensil];
     console.log("result", result);
 
-    if (arrIngredient.length === 0) {
-      // filteredRecipes = recipes;
-      FilterRecipesMainSearch.displayRecipes(originalArr);
-      console.log("originalArr", originalArr);
+    if (result.length === 0) {
+      FilterRecipesMainSearch.displayRecipes(recipeData);
+      FilterRecipesMainSearch.updateAllDropdowns(recipeData);
     } else {
-      filteredRecipes = Dropdown.filteredRecipesByIngredient(
+      let filteredRecipes = recipeData;
+      // filteredRecipes = Dropdown.filteredRecipesByIngredient(
+      //   arrIngredient,
+      //   filteredRecipes
+      // );
+      // Dropdown.filteredRecipesByAppliance(arrAppliance, filteredRecipes);
+      // Dropdown.filteredRecipesByUstensil(arrUstensil, filteredRecipes);
+
+      let filteredIngredient = Dropdown.filteredRecipesByIngredient(
         arrIngredient,
-        recipes
+        recipeData
       );
-      // FilterRecipesMainSearch.DropdownIngredients(filteredRecipes);
-      // console.log(result, filteredRecipes);
-      Dropdown.DropdownIngredients(filteredRecipes);
-      Dropdown.DropdownAppliances(filteredRecipes);
-      Dropdown.DropdownUstensils(filteredRecipes);
+      // console.log("filteredIngredient🖐🏼", filteredIngredient);
+      let filteredAppliance = Dropdown.filteredRecipesByAppliance(
+        arrAppliance,
+        filteredIngredient
+      );
+      // console.log("object filteredAppliance🖐🏼", filteredAppliance);
+      let filteredUstensil = Dropdown.filteredRecipesByUstensil(
+        arrUstensil,
+        filteredAppliance
+      );
+      // console.log("filteredUstensil🖐🏼", filteredUstensil);
+
+      filteredRecipes = filteredIngredient;
+
+      console.log("filteredRecipes🖐🏼", filteredRecipes);
+
+      // return filteredRecipes;
+
+      // console.log(
+      //   "filter🖐🏼",
+      //   filteredIngredient,
+      //   filteredAppliance,
+      //   filteredUstensil,
+      //   filteredRecipes
+      // );
     }
-
-    // if (arrAppliance.length > 0) {
-    //   filteredRecipes = Dropdown.filteredRecipesByAppliance(
-    //     arrAppliance,
-    //     filteredRecipes
-    //   );
-    // }
-
-    // if (arrUstensil.length > 0) {
-    //   filteredRecipes = Dropdown.filteredRecipesByUstensil(
-    //     arrUstensil,
-    //     filteredRecipes
-    //   );
-    // }
   }
 
-  // CHECK IF VALUE EXISTS BEFORE ADD IN THE ARRAY
+  // DELETE TAG IN DOM
+  deleteTagInDOM(id, recipes, value, e) {
+    e.preventDefault();
+    const index = this.arr.findIndex((tag) => Utils.fixId(tag.valueId) === id); // tag.valueId === id);
+    if (index !== -1) {
+      this.arr.splice(index, 1);
+      this.updateCloseBtn(recipes, value);
+      this.updateTagDisplay(recipes);
+    }
+  }
+  // UPDATE CLOSE BTN WHEN I DELETE TAG IN DOM
+  updateCloseBtn(recipes, value) {
+    const closeButtons = document.querySelectorAll(".close");
+    // console.log("closeButtons❌", closeButtons, "✅");
+    closeButtons.forEach((closeBtn) => {
+      const id = closeBtn.id;
+      closeBtn.removeEventListener("click", this.deleteTagInDOM.bind);
+      closeBtn.addEventListener("click", (e) =>
+        this.deleteTagInDOM(id, recipes, value, e)
+      );
+    });
+  }
+  // DISPLAY TAG IN DOM
+  updateTagDisplay(recipes, value) {
+    const tagDiv = document.querySelector("#tag");
+    tagDiv.innerHTML = "";
+
+    this.arr.forEach((val) => {
+      const tag = this.createTag(val.valueId, val.type);
+      tagDiv.appendChild(tag);
+    });
+
+    this.updateCloseBtn(recipes, value);
+    this.filteredTagList(this.arr, recipes);
+  }
+  // CHECK IF VALUE EXISTS BEFORE ADD IN ARRAY
   checkValueExists(valueId, type) {
     return this.arr.some(
       (value) => value.valueId === valueId && value.type === type
     );
   }
-
-  // ADD AND REMOVE TAG IN DOM
+  // ADD TAG IN DOM
   toggleIsActive(eventOrValue, recipes, type) {
-    const tagDiv = document.querySelector("#tag");
-
+    console.log("this.arr", this.arr, "✅");
     const value =
       eventOrValue instanceof Event ? eventOrValue.target : eventOrValue;
-    value.classList.toggle("active");
     const valueId = value.id;
 
-    // CHECK IF THE VALUE ALREADY EXIST IN THE ARRAY
     const tagExists = this.checkValueExists(valueId, type);
     if (!tagExists) {
       this.arr.push({ valueId, type });
     }
 
-    tagDiv.innerHTML = "";
-    this.arr.forEach((val, index) => {
-      const tag = this.createTag(val.valueId, val.type);
-      tagDiv.appendChild(tag);
+    console.log("this.arr", this.arr, "✅");
 
-      const closeBtnId = Utils.fixId(val.valueId);
-      const closeBtn = document.getElementById(closeBtnId);
-      closeBtn.dataset.index = index;
-
-      const that = this;
-      closeBtn.addEventListener("click", function () {
-        const currentIndex = Number(this.dataset.index);
-        that.arr.splice(currentIndex, 1);
-
-        const updateIndexCloseBtns = document.querySelectorAll(".close");
-
-        updateIndexCloseBtns.forEach((btn, index) => {
-          if (index > currentIndex) {
-            btn.dataset.index = Number(btn.dataset.index) - 1;
-          }
-        });
-
-        value.classList.remove("active");
-        this.parentNode.remove();
-        console.log("toggleIsActive", that.arr, "✅");
-
-        that.filteredTagList(that.arr, recipes);
-      });
-    });
-
-    this.filteredTagList(this.arr, recipes);
+    this.updateTagDisplay(recipes, value);
   }
 
   createTag(value, type) {
     let id = Utils.fixId(value);
-
     let $wrapper = document.createElement("button");
     $wrapper.id = `${value}`;
     $wrapper.className = `tag btn btn-yellow d-block my-2 d-flex justify-content-between ${type}`;
     let btn = `${value}
-        <span class="close" id="${id}"> X <span>`;
+            <span class="close" id="${id}"> X <span>`;
     $wrapper.innerHTML = btn;
     return $wrapper;
   }

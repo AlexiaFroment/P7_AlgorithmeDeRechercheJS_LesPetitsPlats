@@ -13,6 +13,7 @@ class Dropdown {
     e.preventDefault();
     const recipes = this.recipe;
     const searchValue = Utils.strNoAccent(search.querySelector("input").value);
+    const searchId = search.id;
 
     arrValues.forEach((value, index) => {
       const val = Utils.strNoAccent(value.toLowerCase());
@@ -20,14 +21,20 @@ class Dropdown {
       if (val === searchValue) {
         const node = nodeList[index];
 
-        this.tagList.toggleIsActive(node, recipes, "ingr");
+        // MANAGE VALUE TO PASS IN TOGGLE
+        if (searchId === "searchL1") {
+          this.tagList.toggleIsActive(node, recipes, "ingr");
+        } else if (searchId === "searchL2") {
+          this.tagList.toggleIsActive(node, recipes, "app");
+        } else if (searchId === "searchL3") {
+          this.tagList.toggleIsActive(node, recipes, "ust");
+        }
         // DELETE VALUE IN INPUT SEARCH
         search.querySelector("input").value = "";
         // CLOSE DROPDOWN MENU
-        const dropdown = document.querySelector(".dropdown-menu");
-        if (dropdown) {
+        document.querySelectorAll(".dropdown-menu").forEach((dropdown) => {
           dropdown.classList.remove("show");
-        }
+        });
       }
     });
   }
@@ -128,6 +135,8 @@ class Dropdown {
     $wrapper.innerHTML = valuesList;
 
     this.searchDropdown("searchL1", "List1");
+    this.searchDropdown("searchL2", "List2");
+    this.searchDropdown("searchL3", "List3");
     return $wrapper;
   }
 }

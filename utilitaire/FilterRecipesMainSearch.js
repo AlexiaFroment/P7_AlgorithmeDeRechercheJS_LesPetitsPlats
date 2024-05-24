@@ -1,7 +1,6 @@
 class FilterRecipesMainSearch {
   static init() {
     this.dropdown = new TagList();
-    // console.log(this);
   }
 
   //   UPDATE VALUES DROPDOWN ON RECIPES FILTERED
@@ -22,12 +21,12 @@ class FilterRecipesMainSearch {
 
     let capitalizeList1 = list1.map((el) => Utils.capitalize(el));
     Utils.sortArr(capitalizeList1);
-    const uniqList = Utils.uniqItem(capitalizeList1);
-    console.log(
-      "liste d'ingredients UNIQUE dans le dropdown 🥕",
-      uniqList.length,
-      "✅"
-    );
+    const uniqList = [...new Set(capitalizeList1)];
+    // console.log(
+    //   "liste d'ingredients UNIQUE dans le dropdown 🥕",
+    //   uniqList.length,
+    //   "✅"
+    // );
 
     const btn1 = document.getElementById("List1");
     btn1.innerHTML = "";
@@ -46,7 +45,6 @@ class FilterRecipesMainSearch {
     List1.forEach((item) => {
       item.addEventListener("click", (e) => {
         e.preventDefault();
-        console.log("this.arr_DropdownIngredient", this.arr);
         this.dropdown.toggleIsActive(e, recipes, "ingr");
       });
     });
@@ -60,13 +58,12 @@ class FilterRecipesMainSearch {
     let capitalizeList2 = filteredArr.map((el) => Utils.capitalize(el));
     Utils.sortArr(capitalizeList2);
 
-    let uniqList = Utils.uniqItem(filteredArr);
-
-    console.log(
-      "liste d'appareils UNIQUE dans le dropdown 🌞",
-      uniqList.length,
-      "✅"
-    );
+    let uniqList = [...new Set(capitalizeList2)];
+    // console.log(
+    //   "liste d'appareils UNIQUE dans le dropdown 🌞",
+    //   uniqList.length,
+    //   "✅"
+    // );
 
     // I UPDATE THE DROPDOWN LIST BY CREATING A NEW DROPDOWN
     const btn2 = document.getElementById("List2");
@@ -106,12 +103,13 @@ class FilterRecipesMainSearch {
 
     let capitalizeList3 = list3.map((el) => Utils.capitalize(el));
     Utils.sortArr(capitalizeList3);
-    let uniqList = Utils.uniqItem(capitalizeList3);
-    console.log(
-      "liste d'ustensils UNIQUE dans le dropdown 🍳",
-      uniqList.length,
-      "✅"
-    );
+
+    let uniqList = [...new Set(capitalizeList3)];
+    // console.log(
+    //   "liste d'ustensils UNIQUE dans le dropdown 🍳",
+    //   uniqList.length,
+    //   "✅"
+    // );
 
     // I UPDATE THE DROPDOWN LIST BY CREATING A NEW DROPDOWN
     const btn3 = document.getElementById("List3");
@@ -167,20 +165,22 @@ class FilterRecipesMainSearch {
 
     searchInput.addEventListener("input", (e) => {
       e.preventDefault();
-      // Delete current DOM
+      // DELETE CURRENT DOM
       recipesSection.innerHTML = "";
       numberOfRecipes.innerHTML = "";
-      // Value entered in the input convert without accent and toLowerCase()
+
+      // VALUE ENTERED IN THE INPUT CONVERT WITHOUT ACCENT, TOLOWERCASE AND TRIM
       let searchedItem = Utils.strNoAccent(e.target.value.toLowerCase().trim());
+
+      // START TO SEARCH WHEN I HAVE AT LEAST 3 LETTERS
       let startToSearch = searchedItem.length >= 3;
 
-      // Create new arr to store the sort items
+      // CREATE NEW ARR TO STORE THE SORT ITEMS
       let filteredRecipeData = [];
 
       if (startToSearch) {
         recipes.filter((recipeData) => {
           // SORT BY NAME ✅
-          // Recipe_name convert without accent and toLowerCase() and check it matches with the searchItem
           const nameStandardised = Utils.strNoAccent(
             recipeData.name.toLowerCase()
           );
@@ -206,16 +206,15 @@ class FilterRecipesMainSearch {
           );
           const description = descriptionStandardised.includes(searchedItem);
 
+          // IF ONE OR MORE VALUE ARE FIND, THE RECIPE IS PUSHED IN THE NEW ARRAY ELSE THE ORIGINAL ARRAY IS USED
           if (name || description || ingredient()) {
-            console.log("recipe_filter", recipeData, "✅");
             filteredRecipeData.push(recipeData);
           }
         });
       } else {
         filteredRecipeData = originalArr;
       }
-
-      // Create new DOM with filtered data
+      // CREATE NEW DOM WITH THE FILTERED DATA
       const number = filteredRecipeData.length;
 
       if (number === 50) {
@@ -224,6 +223,14 @@ class FilterRecipesMainSearch {
       } else {
         FilterRecipesMainSearch.displayRecipes(filteredRecipeData);
         FilterRecipesMainSearch.updateAllDropdowns(filteredRecipeData);
+      }
+    });
+
+    // DELETE VALUE IN INPUT
+    const searchInputValue = searchInput.querySelector("input");
+    searchInputValue.addEventListener("keyup", (e) => {
+      if (e.key === "Enter") {
+        searchInputValue.value = "";
       }
     });
   }

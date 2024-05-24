@@ -5,14 +5,14 @@ class Dropdown {
     this.appliance = appliance;
     this.ustensil = ustensil;
     this.tagList = dropdown;
-    // this.dropdown = new TagList();
-    // this.arr = [];
   }
 
   handleSearchSubmit(search, nodeList, arrValues, e) {
     e.preventDefault();
     const recipes = this.recipe;
-    const searchValue = Utils.strNoAccent(search.querySelector("input").value);
+    const searchValue = Utils.strNoAccent(
+      search.querySelector("input").value
+    ).toLowerCase();
     const searchId = search.id;
 
     arrValues.forEach((value, index) => {
@@ -29,13 +29,13 @@ class Dropdown {
         } else if (searchId === "searchL3") {
           this.tagList.toggleIsActive(node, recipes, "ust");
         }
+
         // DELETE VALUE IN INPUT SEARCH
         search.querySelector("input").value = "";
         // CLOSE DROPDOWN MENU
-        const dropdown = document.querySelector(".dropdown-menu");
-        if (dropdown) {
+        document.querySelectorAll(".dropdown-menu").forEach((dropdown) => {
           dropdown.classList.remove("show");
-        }
+        });
       }
     });
   }
@@ -57,12 +57,6 @@ class Dropdown {
     );
   }
 
-  static filteredRecipesByAllDropdowns(arr, recipes) {
-    Dropdown.filteredRecipesByIngredient(arr, recipes);
-    Dropdown.filteredRecipesByAppliance(arr, recipes);
-    Dropdown.filteredRecipesByUstensil(arr, recipes);
-  }
-  // MEP FILTER ON RECIPESDATA TO DISPLAY RECIPES BY INGREDIENT TAG ✅
   static filteredRecipesByIngredient(arr, recipes) {
     const recipesFiltered = [];
 
@@ -83,7 +77,7 @@ class Dropdown {
       }
     }
 
-    FilterRecipesMainSearch.DropdownIngredients(recipesFiltered);
+    FilterRecipesMainSearch.updateAllDropdowns(recipesFiltered);
     FilterRecipesMainSearch.displayRecipes(recipesFiltered);
     return recipesFiltered;
   }
@@ -93,7 +87,7 @@ class Dropdown {
       return arr.every((value) => recipe.appliance === value);
     });
 
-    FilterRecipesMainSearch.DropdownAppliances(recipesFiltered);
+    FilterRecipesMainSearch.updateAllDropdowns(recipesFiltered);
     FilterRecipesMainSearch.displayRecipes(recipesFiltered);
     return recipesFiltered;
   }
@@ -122,7 +116,7 @@ class Dropdown {
         }
       });
     }
-    FilterRecipesMainSearch.DropdownUstensils(recipesFiltered);
+    FilterRecipesMainSearch.updateAllDropdowns(recipesFiltered);
     FilterRecipesMainSearch.displayRecipes(recipesFiltered);
     return recipesFiltered;
   }

@@ -4,7 +4,6 @@ class SecondMethodFilterRecipesMainSearch {
   }
 
   static filterRecipesByInput(recipes) {
-    console.log("recipes", recipes);
     const searchInput = document.querySelector(".search_input");
     const recipesSection = document.querySelector("#recipe");
     const numberOfRecipes = document.querySelector("#number_recipes");
@@ -12,16 +11,16 @@ class SecondMethodFilterRecipesMainSearch {
     // SORT BY  NAME ✅
     const originalArr = [...recipes];
     Utils.sortLocaleCompare(recipes);
-    // console.log("localcompare", recipes, "✅");
 
     searchInput.addEventListener("input", (e) => {
-      // Delete current DOM
+      // DELETE CURRENT DOM
       recipesSection.innerHTML = "";
       numberOfRecipes.innerHTML = "";
-      // Value entered in the input convert without accent and toLowerCase()
+
       let searchedItem = Utils.strNoAccent(e.target.value.toLowerCase().trim());
       let startToSearch = searchedItem.length >= 3;
-      // Create new arr to store the sort items
+
+      // CREATE NEW ARR TO STORE THE SORT ITEMS
       let filteredRecipeData = [];
 
       if (startToSearch) {
@@ -49,14 +48,13 @@ class SecondMethodFilterRecipesMainSearch {
           const descriptionStandardised = Utils.strNoAccent(
             recipeData.description.toLowerCase()
           );
-          // return regex.test(descriptionStandardised);
           return regex.exec(descriptionStandardised);
         });
       } else {
         filteredRecipeData = originalArr;
       }
 
-      // Crée le nouveau DOM avec les données filtrées
+      // CREATE NEW DOM WITH THE FILTERED DATA
       const number = filteredRecipeData.length;
 
       if (number === 50) {
@@ -65,6 +63,15 @@ class SecondMethodFilterRecipesMainSearch {
       } else {
         FilterRecipesMainSearch.displayRecipes(filteredRecipeData);
         FilterRecipesMainSearch.updateAllDropdowns(filteredRecipeData);
+      }
+    });
+
+    // DELETE VALUE IN INPUT
+    const searchInputValue = searchInput.querySelector("input");
+
+    searchInputValue.addEventListener("keyup", (e) => {
+      if (e.key === "Enter") {
+        searchInputValue.value = "";
       }
     });
   }

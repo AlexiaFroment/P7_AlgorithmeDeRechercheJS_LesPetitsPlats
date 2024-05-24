@@ -1,6 +1,6 @@
 class Index {
   constructor() {
-    // call API to get data
+    // CALL API TO GET DATA
     this.recipesApi = new ApiRecipes("./data/recipes.json");
     this.recipesData = [];
     this.dropdown = new TagList();
@@ -20,7 +20,6 @@ class Index {
     List1.forEach((item) => {
       item.addEventListener("click", (e) => {
         e.preventDefault();
-        console.log("ingredient", recipesData);
         this.dropdown.toggleIsActive(e, recipesData, "ingr");
       });
     });
@@ -54,13 +53,11 @@ class Index {
 
   // GET NUMBER OF RECIPES DISPLAY
   async numberOfRecipes() {
-    // const recipesData = await this.recipesApi.get();
     FilterRecipesMainSearch.displayRecipes(this.recipesData);
   }
 
   // GET RECIPES
   async recipes() {
-    // const recipesData = await this.recipesApi.get();
     FilterRecipesMainSearch.displayRecipes(this.recipesData);
   }
 

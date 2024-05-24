@@ -1,6 +1,6 @@
 class Index {
   constructor() {
-    // call API to get data
+    // CALL API TO GET DATA
     this.recipesApi = new ApiRecipes("./data/recipes.json");
     this.recipesData = [];
     this.dropdown = new TagList();
@@ -53,13 +53,11 @@ class Index {
 
   // GET NUMBER OF RECIPES DISPLAY
   async numberOfRecipes() {
-    // const recipesData = await this.recipesApi.get();
     FilterRecipesMainSearch.displayRecipes(this.recipesData);
   }
 
   // GET RECIPES
   async recipes() {
-    // const recipesData = await this.recipesApi.get();
     FilterRecipesMainSearch.displayRecipes(this.recipesData);
   }
 
