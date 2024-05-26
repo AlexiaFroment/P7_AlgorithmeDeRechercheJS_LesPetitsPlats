@@ -11,7 +11,6 @@ class Index {
     // const recipesData = await this.recipesApi.get();
     const recipesDataFilter = [...this.recipesData];
     FilterRecipesMainSearch.filterRecipesByInput(recipesDataFilter);
-    // SecondMethodFilterRecipesMainSearch.filterRecipesByInput(recipesDataFilter);
   }
 
   // CREATE INGREDIENTS DROPDOWN
@@ -36,6 +35,7 @@ class Index {
         this.dropdown.toggleIsActive(e, recipesData, "app");
       });
     });
+
     FilterRecipesMainSearch.DropdownAppliances(this.recipesData);
   }
 
@@ -48,6 +48,7 @@ class Index {
         this.dropdown.toggleIsActive(e, recipesData, "ust");
       });
     });
+
     FilterRecipesMainSearch.DropdownUstensils(this.recipesData);
   }
 

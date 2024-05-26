@@ -116,6 +116,7 @@ class Dropdown {
         }
       });
     }
+
     FilterRecipesMainSearch.updateAllDropdowns(recipesFiltered);
     FilterRecipesMainSearch.displayRecipes(recipesFiltered);
     return recipesFiltered;

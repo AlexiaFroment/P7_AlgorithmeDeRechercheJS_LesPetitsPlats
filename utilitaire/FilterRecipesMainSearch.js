@@ -227,12 +227,12 @@ class FilterRecipesMainSearch {
     });
 
     // DELETE VALUE IN INPUT
-    const searchInputValue = searchInput.querySelector("input");
-    searchInputValue.addEventListener("keyup", (e) => {
-      if (e.key === "Enter") {
-        searchInputValue.value = "";
-      }
-    });
+    // const searchInputValue = searchInput.querySelector("input");
+    // searchInputValue.addEventListener("keyup", (e) => {
+    //   if (e.key === "Enter") {
+    //     searchInputValue.value = "";
+    //   }
+    // });
   }
 }
 
