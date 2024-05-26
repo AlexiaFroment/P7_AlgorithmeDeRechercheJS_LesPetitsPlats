@@ -22,11 +22,11 @@ class FilterRecipesMainSearch {
     let capitalizeList1 = list1.map((el) => Utils.capitalize(el));
     Utils.sortArr(capitalizeList1);
     const uniqList = [...new Set(capitalizeList1)];
-    // console.log(
-    //   "liste d'ingredients UNIQUE dans le dropdown 🥕",
-    //   uniqList.length,
-    //   "✅"
-    // );
+    console.log(
+      "liste d'ingredients UNIQUE dans le dropdown 🥕",
+      uniqList.length,
+      "✅"
+    );
 
     const btn1 = document.getElementById("List1");
     btn1.innerHTML = "";
@@ -45,6 +45,7 @@ class FilterRecipesMainSearch {
     List1.forEach((item) => {
       item.addEventListener("click", (e) => {
         e.preventDefault();
+        console.log("dropdown ingredients", recipes);
         this.dropdown.toggleIsActive(e, recipes, "ingr");
       });
     });
@@ -59,11 +60,11 @@ class FilterRecipesMainSearch {
     Utils.sortArr(capitalizeList2);
 
     let uniqList = [...new Set(capitalizeList2)];
-    // console.log(
-    //   "liste d'appareils UNIQUE dans le dropdown 🌞",
-    //   uniqList.length,
-    //   "✅"
-    // );
+    console.log(
+      "liste d'appareils UNIQUE dans le dropdown 🌞",
+      uniqList.length,
+      "✅"
+    );
 
     // I UPDATE THE DROPDOWN LIST BY CREATING A NEW DROPDOWN
     const btn2 = document.getElementById("List2");
@@ -105,11 +106,11 @@ class FilterRecipesMainSearch {
     Utils.sortArr(capitalizeList3);
 
     let uniqList = [...new Set(capitalizeList3)];
-    // console.log(
-    //   "liste d'ustensils UNIQUE dans le dropdown 🍳",
-    //   uniqList.length,
-    //   "✅"
-    // );
+    console.log(
+      "liste d'ustensils UNIQUE dans le dropdown 🍳",
+      uniqList.length,
+      "✅"
+    );
 
     // I UPDATE THE DROPDOWN LIST BY CREATING A NEW DROPDOWN
     const btn3 = document.getElementById("List3");

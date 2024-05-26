@@ -5,6 +5,7 @@ class TagList {
   }
 
   async filteredTagList(arr, recipes) {
+    console.log("recipes", recipes);
     const recipeData = await this.recipesApi.get();
 
     let arrIngredient = [];
@@ -50,14 +51,15 @@ class TagList {
 
     // FILTER DATA, DROPDOWN AND DISPLAY
     if (result.length === 0) {
-      FilterRecipesMainSearch.displayRecipes(recipeData);
-      FilterRecipesMainSearch.updateAllDropdowns(recipeData);
+      FilterRecipesMainSearch.displayRecipes(recipes);
+      FilterRecipesMainSearch.updateAllDropdowns(recipes);
     } else {
-      let filteredRecipes = recipeData;
+      const filteredRecipes = [...recipes];
+      let filteredRecipesbyTag = filteredRecipes;
 
       let filterByIngredient = Dropdown.filteredRecipesByIngredient(
         arrIngredient,
-        filteredRecipes
+        filteredRecipesbyTag
       );
 
       let filterByAppliance = Dropdown.filteredRecipesByAppliance(
@@ -70,23 +72,24 @@ class TagList {
         filterByAppliance
       );
 
-      // console.log(
-      //   "filteredRecipesAfterFilter",
-      //   filteredRecipes,
-      //   "filterByIngredient",
-      //   filterByIngredient,
-      //   "filterByAppliance",
-      //   filterByAppliance,
-      //   "filterByUstensil",
-      //   filterByUstensil,
-      //   "✅"
-      // );
+      console.log(
+        "filteredRecipesAfterFilter",
+        filteredRecipesbyTag,
+        "filterByIngredient",
+        filterByIngredient,
+        "filterByAppliance",
+        filterByAppliance,
+        "filterByUstensil",
+        filterByUstensil,
+        "✅"
+      );
     }
   }
 
   // DELETE TAG IN DOM
   deleteTagInDOM(id, recipes, value, e) {
     e.preventDefault();
+
     const index = this.arr.findIndex((tag) => Utils.fixId(tag.valueId) === id); // tag.valueId === id);
     if (index !== -1) {
       this.arr.splice(index, 1);
@@ -127,6 +130,7 @@ class TagList {
   }
   // ADD TAG IN DOM
   toggleIsActive(eventOrValue, recipes, type) {
+    console.log("toggleIsActive", recipes);
     const value =
       eventOrValue instanceof Event ? eventOrValue.target : eventOrValue;
     const valueId = value.id;
