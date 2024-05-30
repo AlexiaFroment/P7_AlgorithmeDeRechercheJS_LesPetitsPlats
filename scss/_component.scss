@@ -1,4 +1,4 @@
-// BANNER
+// Banner
 .title_w {
   max-width: 70vw;
   margin: 100px auto 50px auto;
@@ -14,7 +14,6 @@ a.dropdown-item {
 a.dropdown-item:hover {
   background: $yellow;
 }
-
 //tag
 #tag {
   display: flex;
@@ -23,8 +22,13 @@ a.dropdown-item:hover {
   min-width: 170px;
   margin: 0 5px;
 }
-
 // RecipeCard
+.no_result {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 400;
+  padding: 100px 200px;
+}
 .recipe_card {
   .card-body {
     min-height: 460px;
@@ -49,7 +53,6 @@ a.dropdown-item:hover {
   overflow: hidden;
   margin: 10px 0;
 }
-
 #recipe_ingredients {
   // list-style-type: none;
   // padding: 10px 0;

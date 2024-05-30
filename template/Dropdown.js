@@ -10,13 +10,13 @@ class Dropdown {
   handleSearchSubmit(search, nodeList, arrValues, e) {
     e.preventDefault();
     const recipes = this.recipe;
-    const searchValue = Utils.strNoAccent(
+    const searchValue = Utils.normalizeString(
       search.querySelector("input").value
-    ).toLowerCase();
+    );
     const searchId = search.id;
 
     arrValues.forEach((value, index) => {
-      const val = Utils.strNoAccent(value.toLowerCase());
+      const val = Utils.normalizeString(value);
 
       if (val === searchValue) {
         const node = nodeList[index];
@@ -77,8 +77,10 @@ class Dropdown {
       }
     }
 
-    FilterRecipesMainSearch.updateAllDropdowns(recipesFiltered);
-    FilterRecipesMainSearch.displayRecipes(recipesFiltered);
+    SecondMethodFilterRecipesMainSearch.updateAllDropdowns(recipesFiltered);
+    SecondMethodFilterRecipesMainSearch.displayRecipes(recipesFiltered);
+    // FilterRecipesMainSearch.updateAllDropdowns(recipesFiltered);
+    // FilterRecipesMainSearch.displayRecipes(recipesFiltered);
     return recipesFiltered;
   }
 
@@ -87,8 +89,10 @@ class Dropdown {
       return arr.every((value) => recipe.appliance === value);
     });
 
-    FilterRecipesMainSearch.updateAllDropdowns(recipesFiltered);
-    FilterRecipesMainSearch.displayRecipes(recipesFiltered);
+    SecondMethodFilterRecipesMainSearch.updateAllDropdowns(recipesFiltered);
+    SecondMethodFilterRecipesMainSearch.displayRecipes(recipesFiltered);
+    // FilterRecipesMainSearch.updateAllDropdowns(recipesFiltered);
+    // FilterRecipesMainSearch.displayRecipes(recipesFiltered);
     return recipesFiltered;
   }
 
@@ -116,9 +120,10 @@ class Dropdown {
         }
       });
     }
-
-    FilterRecipesMainSearch.updateAllDropdowns(recipesFiltered);
-    FilterRecipesMainSearch.displayRecipes(recipesFiltered);
+    SecondMethodFilterRecipesMainSearch.updateAllDropdowns(recipesFiltered);
+    SecondMethodFilterRecipesMainSearch.displayRecipes(recipesFiltered);
+    // FilterRecipesMainSearch.updateAllDropdowns(recipesFiltered);
+    // FilterRecipesMainSearch.displayRecipes(recipesFiltered);
     return recipesFiltered;
   }
 

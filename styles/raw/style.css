@@ -74,6 +74,10 @@ img {
   max-width: 60%;
 }
 
+a.dropdown-item {
+  padding: 4px 0;
+}
+
 a.dropdown-item:hover {
   background: #ffd15b;
 }
@@ -85,6 +89,13 @@ a.dropdown-item:hover {
 .tag {
   min-width: 170px;
   margin: 0 5px;
+}
+
+.no_result {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 400;
+  padding: 100px 200px;
 }
 
 .recipe_card .card-body {

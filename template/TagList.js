@@ -5,7 +5,6 @@ class TagList {
   }
 
   async filteredTagList(arr, recipes) {
-    console.log("recipes", recipes);
     const recipeData = await this.recipesApi.get();
 
     let arrIngredient = [];
@@ -47,49 +46,102 @@ class TagList {
     });
 
     let result = [...arrIngredient, ...arrAppliance, ...arrUstensil];
-    // console.log("result", result);
 
     // FILTER DATA, DROPDOWN AND DISPLAY
-    if (result.length === 0) {
-      FilterRecipesMainSearch.displayRecipes(recipes);
-      FilterRecipesMainSearch.updateAllDropdowns(recipes);
+    const searchInput = document.querySelector(".search_input input");
+    const searchInputValue = searchInput.value.trim();
+
+    if (searchInputValue === "") {
+      // JE FILTRE SUR LE CALL API RECIPEDATA
+      console.log("vide");
+      if (result.length === 0) {
+        SecondMethodFilterRecipesMainSearch.displayRecipes(recipeData);
+        SecondMethodFilterRecipesMainSearch.updateAllDropdowns(recipeData);
+        // FilterRecipesMainSearch.displayRecipes(recipeData);
+        // FilterRecipesMainSearch.updateAllDropdowns(recipeData);
+      } else {
+        let filteredRecipes = recipeData;
+
+        let filterByIngredient = Dropdown.filteredRecipesByIngredient(
+          arrIngredient,
+          filteredRecipes
+        );
+
+        let filterByAppliance = Dropdown.filteredRecipesByAppliance(
+          arrAppliance,
+          filterByIngredient
+        );
+
+        let filterByUstensil = Dropdown.filteredRecipesByUstensil(
+          arrUstensil,
+          filterByAppliance
+        );
+
+        // console.log(
+        //   "filteredRecipesAfterFilter",
+        //   filteredRecipes,
+        //   "filterByIngredient",
+        //   filterByIngredient,
+        //   "filterByAppliance",
+        //   filterByAppliance,
+        //   "filterByUstensil",
+        //   filterByUstensil,
+        //   "✅"
+        // );
+      }
     } else {
-      const filteredRecipes = [...recipes];
-      let filteredRecipesbyTag = filteredRecipes;
+      // JE FILTRE SUR RECIPE
+      if (result.length === 0) {
+        console.log(searchInputValue);
+        const originalArr =
+          SecondMethodFilterRecipesMainSearch.filterRecipesManually(
+            recipeData,
+            searchInputValue
+          );
+        SecondMethodFilterRecipesMainSearch.displayRecipes(originalArr);
+        SecondMethodFilterRecipesMainSearch.updateAllDropdowns(originalArr);
+        // FilterRecipesMainSearch.displayRecipes(recipeData);
+        // FilterRecipesMainSearch.updateAllDropdowns(recipeData);
+      } else {
+        let filteredRecipes =
+          SecondMethodFilterRecipesMainSearch.filterRecipesManually(
+            recipeData,
+            searchInputValue
+          );
 
-      let filterByIngredient = Dropdown.filteredRecipesByIngredient(
-        arrIngredient,
-        filteredRecipesbyTag
-      );
+        let filterByIngredient = Dropdown.filteredRecipesByIngredient(
+          arrIngredient,
+          filteredRecipes
+        );
 
-      let filterByAppliance = Dropdown.filteredRecipesByAppliance(
-        arrAppliance,
-        filterByIngredient
-      );
+        let filterByAppliance = Dropdown.filteredRecipesByAppliance(
+          arrAppliance,
+          filterByIngredient
+        );
 
-      let filterByUstensil = Dropdown.filteredRecipesByUstensil(
-        arrUstensil,
-        filterByAppliance
-      );
+        let filterByUstensil = Dropdown.filteredRecipesByUstensil(
+          arrUstensil,
+          filterByAppliance
+        );
 
-      console.log(
-        "filteredRecipesAfterFilter",
-        filteredRecipesbyTag,
-        "filterByIngredient",
-        filterByIngredient,
-        "filterByAppliance",
-        filterByAppliance,
-        "filterByUstensil",
-        filterByUstensil,
-        "✅"
-      );
+        // console.log(
+        //   "filteredRecipesAfterFilter",
+        //   filteredRecipes,
+        //   "filterByIngredient",
+        //   filterByIngredient,
+        //   "filterByAppliance",
+        //   filterByAppliance,
+        //   "filterByUstensil",
+        //   filterByUstensil,
+        //   "✅"
+        // );
+      }
     }
   }
 
   // DELETE TAG IN DOM
   deleteTagInDOM(id, recipes, value, e) {
     e.preventDefault();
-
     const index = this.arr.findIndex((tag) => Utils.fixId(tag.valueId) === id); // tag.valueId === id);
     if (index !== -1) {
       this.arr.splice(index, 1);
@@ -130,7 +182,6 @@ class TagList {
   }
   // ADD TAG IN DOM
   toggleIsActive(eventOrValue, recipes, type) {
-    console.log("toggleIsActive", recipes);
     const value =
       eventOrValue instanceof Event ? eventOrValue.target : eventOrValue;
     const valueId = value.id;

@@ -10,7 +10,8 @@ class Index {
   async filterRecipes() {
     // const recipesData = await this.recipesApi.get();
     const recipesDataFilter = [...this.recipesData];
-    FilterRecipesMainSearch.filterRecipesByInput(recipesDataFilter);
+    // FilterRecipesMainSearch.filterRecipesByInput(recipesDataFilter);
+    SecondMethodFilterRecipesMainSearch.filterRecipesByInput(recipesDataFilter);
   }
 
   // CREATE INGREDIENTS DROPDOWN
@@ -23,7 +24,8 @@ class Index {
       });
     });
 
-    FilterRecipesMainSearch.DropdownIngredients(this.recipesData);
+    // FilterRecipesMainSearch.DropdownIngredients(this.recipesData);
+    SecondMethodFilterRecipesMainSearch.DropdownIngredients(this.recipesData);
   }
 
   // CREATE APPLIANCE DROPDOWN
@@ -35,8 +37,8 @@ class Index {
         this.dropdown.toggleIsActive(e, recipesData, "app");
       });
     });
-
-    FilterRecipesMainSearch.DropdownAppliances(this.recipesData);
+    // FilterRecipesMainSearch.DropdownAppliances(this.recipesData);
+    SecondMethodFilterRecipesMainSearch.DropdownAppliances(this.recipesData);
   }
 
   // CREATE USTENSILS DROPDOWN
@@ -48,18 +50,20 @@ class Index {
         this.dropdown.toggleIsActive(e, recipesData, "ust");
       });
     });
-
-    FilterRecipesMainSearch.DropdownUstensils(this.recipesData);
+    // FilterRecipesMainSearch.DropdownUstensils(this.recipesData);
+    SecondMethodFilterRecipesMainSearch.DropdownUstensils(this.recipesData);
   }
 
   // GET NUMBER OF RECIPES DISPLAY
   async numberOfRecipes() {
-    FilterRecipesMainSearch.displayRecipes(this.recipesData);
+    // FilterRecipesMainSearch.displayRecipes(this.recipesData);
+    SecondMethodFilterRecipesMainSearch.displayRecipes(this.recipesData);
   }
 
   // GET RECIPES
   async recipes() {
-    FilterRecipesMainSearch.displayRecipes(this.recipesData);
+    // FilterRecipesMainSearch.displayRecipes(this.recipesData);
+    SecondMethodFilterRecipesMainSearch.displayRecipes(this.recipesData);
   }
 
   async init() {
