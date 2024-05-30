@@ -8,7 +8,6 @@ class Index {
 
   // 2 METHODS TO FILTER RECIPES ON THE INPUT MAIN SEARCH
   async filterRecipes() {
-    // const recipesData = await this.recipesApi.get();
     const recipesDataFilter = [...this.recipesData];
     FilterRecipesMainSearch.filterRecipesByInput(recipesDataFilter);
   }

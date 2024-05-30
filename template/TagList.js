@@ -5,7 +5,6 @@ class TagList {
   }
 
   async filteredTagList(arr, recipes) {
-    console.log("recipes", recipes);
     const recipeData = await this.recipesApi.get();
 
     let arrIngredient = [];
@@ -47,49 +46,83 @@ class TagList {
     });
 
     let result = [...arrIngredient, ...arrAppliance, ...arrUstensil];
-    // console.log("result", result);
 
     // FILTER DATA, DROPDOWN AND DISPLAY
-    if (result.length === 0) {
-      FilterRecipesMainSearch.displayRecipes(recipes);
-      FilterRecipesMainSearch.updateAllDropdowns(recipes);
+    const searchInput = document.querySelector(".search_input input");
+    const searchInputValue = searchInput.value.trim();
+
+    // IF MAIN INPUT IS EMPTY ELSE NOT
+    if (searchInputValue === "") {
+      if (result.length === 0) {
+        // SecondMethodFilterRecipesMainSearch.displayRecipes(recipeData);
+        // SecondMethodFilterRecipesMainSearch.updateAllDropdowns(recipeData);
+        FilterRecipesMainSearch.displayRecipes(recipeData);
+        FilterRecipesMainSearch.updateAllDropdowns(recipeData);
+      } else {
+        let filteredRecipes = recipeData;
+
+        let filterByIngredient = Dropdown.filteredRecipesByIngredient(
+          arrIngredient,
+          filteredRecipes
+        );
+
+        let filterByAppliance = Dropdown.filteredRecipesByAppliance(
+          arrAppliance,
+          filterByIngredient
+        );
+
+        let filterByUstensil = Dropdown.filteredRecipesByUstensil(
+          arrUstensil,
+          filterByAppliance
+        );
+      }
     } else {
-      const filteredRecipes = [...recipes];
-      let filteredRecipesbyTag = filteredRecipes;
+      if (result.length === 0) {
+        // const originalArr =
+        //   SecondMethodFilterRecipesMainSearch.filterRecipesManually(
+        //     recipeData,
+        //     searchInputValue
+        //   );
+        const originalArr = FilterRecipesMainSearch.filterRecipesManually(
+          recipeData,
+          searchInputValue
+        );
+        // SecondMethodFilterRecipesMainSearch.displayRecipes(originalArr);
+        // SecondMethodFilterRecipesMainSearch.updateAllDropdowns(originalArr);
+        FilterRecipesMainSearch.displayRecipes(originalArr);
+        FilterRecipesMainSearch.updateAllDropdowns(originalArr);
+      } else {
+        // let filteredRecipes =
+        //   SecondMethodFilterRecipesMainSearch.filterRecipesManually(
+        //     recipeData,
+        //     searchInputValue
+        //   );
+        let filteredRecipes = FilterRecipesMainSearch.filterRecipesManually(
+          recipeData,
+          searchInputValue
+        );
 
-      let filterByIngredient = Dropdown.filteredRecipesByIngredient(
-        arrIngredient,
-        filteredRecipesbyTag
-      );
+        let filterByIngredient = Dropdown.filteredRecipesByIngredient(
+          arrIngredient,
+          filteredRecipes
+        );
 
-      let filterByAppliance = Dropdown.filteredRecipesByAppliance(
-        arrAppliance,
-        filterByIngredient
-      );
+        let filterByAppliance = Dropdown.filteredRecipesByAppliance(
+          arrAppliance,
+          filterByIngredient
+        );
 
-      let filterByUstensil = Dropdown.filteredRecipesByUstensil(
-        arrUstensil,
-        filterByAppliance
-      );
-
-      console.log(
-        "filteredRecipesAfterFilter",
-        filteredRecipesbyTag,
-        "filterByIngredient",
-        filterByIngredient,
-        "filterByAppliance",
-        filterByAppliance,
-        "filterByUstensil",
-        filterByUstensil,
-        "✅"
-      );
+        let filterByUstensil = Dropdown.filteredRecipesByUstensil(
+          arrUstensil,
+          filterByAppliance
+        );
+      }
     }
   }
 
   // DELETE TAG IN DOM
   deleteTagInDOM(id, recipes, value, e) {
     e.preventDefault();
-
     const index = this.arr.findIndex((tag) => Utils.fixId(tag.valueId) === id); // tag.valueId === id);
     if (index !== -1) {
       this.arr.splice(index, 1);
@@ -130,7 +163,6 @@ class TagList {
   }
   // ADD TAG IN DOM
   toggleIsActive(eventOrValue, recipes, type) {
-    console.log("toggleIsActive", recipes);
     const value =
       eventOrValue instanceof Event ? eventOrValue.target : eventOrValue;
     const valueId = value.id;
@@ -139,8 +171,6 @@ class TagList {
     if (!tagExists) {
       this.arr.push({ valueId, type });
     }
-
-    // console.log("this.arr", this.arr, "✅");
 
     this.updateTagDisplay(recipes, value);
   }

@@ -22,11 +22,11 @@ class FilterRecipesMainSearch {
     let capitalizeList1 = list1.map((el) => Utils.capitalize(el));
     Utils.sortArr(capitalizeList1);
     const uniqList = [...new Set(capitalizeList1)];
-    console.log(
-      "liste d'ingredients UNIQUE dans le dropdown 🥕",
-      uniqList.length,
-      "✅"
-    );
+    // console.log(
+    //   "liste d'ingredients UNIQUE dans le dropdown 🥕",
+    //   uniqList.length,
+    //   "✅"
+    // );
 
     const btn1 = document.getElementById("List1");
     btn1.innerHTML = "";
@@ -45,7 +45,6 @@ class FilterRecipesMainSearch {
     List1.forEach((item) => {
       item.addEventListener("click", (e) => {
         e.preventDefault();
-        console.log("dropdown ingredients", recipes);
         this.dropdown.toggleIsActive(e, recipes, "ingr");
       });
     });
@@ -60,11 +59,11 @@ class FilterRecipesMainSearch {
     Utils.sortArr(capitalizeList2);
 
     let uniqList = [...new Set(capitalizeList2)];
-    console.log(
-      "liste d'appareils UNIQUE dans le dropdown 🌞",
-      uniqList.length,
-      "✅"
-    );
+    // console.log(
+    //   "liste d'appareils UNIQUE dans le dropdown 🌞",
+    //   uniqList.length,
+    //   "✅"
+    // );
 
     // I UPDATE THE DROPDOWN LIST BY CREATING A NEW DROPDOWN
     const btn2 = document.getElementById("List2");
@@ -106,11 +105,11 @@ class FilterRecipesMainSearch {
     Utils.sortArr(capitalizeList3);
 
     let uniqList = [...new Set(capitalizeList3)];
-    console.log(
-      "liste d'ustensils UNIQUE dans le dropdown 🍳",
-      uniqList.length,
-      "✅"
-    );
+    // console.log(
+    //   "liste d'ustensils UNIQUE dans le dropdown 🍳",
+    //   uniqList.length,
+    //   "✅"
+    // );
 
     // I UPDATE THE DROPDOWN LIST BY CREATING A NEW DROPDOWN
     const btn3 = document.getElementById("List3");
@@ -140,11 +139,20 @@ class FilterRecipesMainSearch {
   static displayRecipes(recipes) {
     const numberOfRecipes = document.getElementById("number_recipes");
     const recipesCards = document.getElementById("recipe");
+    const searchValue = document.querySelector(".search_input input").value;
 
     const number = recipes.length;
 
     numberOfRecipes.innerHTML = "";
     recipesCards.innerHTML = "";
+
+    if (recipes.length === 0) {
+      recipesCards.innerHTML = `Aucune recette ne contient "${searchValue}", vous pouvez essayer avec d'autres mots clefs comme "tarte aux pommes", "poisson"...`;
+    }
+    recipesCards.className =
+      recipes.length === 0
+        ? "no_result"
+        : "container row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 d-flex justify-content-center mx-auto my-3";
 
     const templateCount = new List();
     numberOfRecipes.appendChild(templateCount.createCountList(number));
@@ -164,6 +172,8 @@ class FilterRecipesMainSearch {
     const originalArr = [...recipes];
     Utils.sortArrByKey(recipes, "name");
 
+    let filteredRecipeData = [];
+
     searchInput.addEventListener("input", (e) => {
       e.preventDefault();
       // DELETE CURRENT DOM
@@ -171,50 +181,13 @@ class FilterRecipesMainSearch {
       numberOfRecipes.innerHTML = "";
 
       // VALUE ENTERED IN THE INPUT CONVERT WITHOUT ACCENT, TOLOWERCASE AND TRIM
-      let searchedItem = Utils.strNoAccent(e.target.value.toLowerCase().trim());
+      let searchedItem = Utils.normalizeString(e.target.value.trim());
 
-      // START TO SEARCH WHEN I HAVE AT LEAST 3 LETTERS
-      let startToSearch = searchedItem.length >= 3;
+      filteredRecipeData = FilterRecipesMainSearch.filterRecipesManually(
+        recipes,
+        searchedItem
+      );
 
-      // CREATE NEW ARR TO STORE THE SORT ITEMS
-      let filteredRecipeData = [];
-
-      if (startToSearch) {
-        recipes.filter((recipeData) => {
-          // SORT BY NAME ✅
-          const nameStandardised = Utils.strNoAccent(
-            recipeData.name.toLowerCase()
-          );
-          const name = nameStandardised.includes(searchedItem);
-
-          // SORT BY INGREDIENTS ✅
-          const ingredient = () => {
-            for (const ingredient of recipeData.ingredients) {
-              // Convert ingredients without accent and toLowerCase() and check it matches with the searchItem
-              const ingr = Utils.strNoAccent(
-                ingredient.ingredient.toLowerCase()
-              );
-
-              if (ingr.match(searchedItem)) {
-                return ingr;
-              }
-            }
-          };
-
-          // SORT BY DESCRIPTION ✅
-          const descriptionStandardised = Utils.strNoAccent(
-            recipeData.description.toLowerCase()
-          );
-          const description = descriptionStandardised.includes(searchedItem);
-
-          // IF ONE OR MORE VALUE ARE FIND, THE RECIPE IS PUSHED IN THE NEW ARRAY ELSE THE ORIGINAL ARRAY IS USED
-          if (name || description || ingredient()) {
-            filteredRecipeData.push(recipeData);
-          }
-        });
-      } else {
-        filteredRecipeData = originalArr;
-      }
       // CREATE NEW DOM WITH THE FILTERED DATA
       const number = filteredRecipeData.length;
 
@@ -226,14 +199,44 @@ class FilterRecipesMainSearch {
         FilterRecipesMainSearch.updateAllDropdowns(filteredRecipeData);
       }
     });
+  }
 
-    // DELETE VALUE IN INPUT
-    const searchInputValue = searchInput.querySelector("input");
-    searchInputValue.addEventListener("keyup", (e) => {
-      if (e.key === "Enter") {
-        searchInputValue.value = "";
-      }
-    });
+  static filterRecipesManually(recipes, searchedItem) {
+    // START TO SEARCH WHEN I HAVE AT LEAST 3 LETTERS
+    let startToSearch = searchedItem.length >= 3;
+
+    // CREATE NEW ARR TO STORE THE SORT ITEMS
+    let filteredRecipeData = [];
+
+    if (startToSearch) {
+      recipes.filter((recipeData) => {
+        // SORT BY NAME ✅
+        const nameStandardised = Utils.normalizeString(recipeData.name);
+        const name = nameStandardised.includes(searchedItem);
+        // SORT BY INGREDIENTS ✅
+        const ingredient = () => {
+          for (const ingredient of recipeData.ingredients) {
+            // Convert ingredients without accent and toLowerCase() and check it matches with the searchItem
+            const ingr = Utils.normalizeString(ingredient.ingredient);
+            if (ingr.match(searchedItem)) {
+              return ingr;
+            }
+          }
+        };
+        // SORT BY DESCRIPTION ✅
+        const descriptionStandardised = Utils.normalizeString(
+          recipeData.description
+        );
+        const description = descriptionStandardised.includes(searchedItem);
+        // IF ONE OR MORE VALUE ARE FIND, THE RECIPE IS PUSHED IN THE NEW ARRAY ELSE THE ORIGINAL ARRAY IS USED
+        if (name || description || ingredient()) {
+          filteredRecipeData.push(recipeData);
+        }
+      });
+    } else {
+      filteredRecipeData = recipes;
+    }
+    return filteredRecipeData;
   }
 }
 
