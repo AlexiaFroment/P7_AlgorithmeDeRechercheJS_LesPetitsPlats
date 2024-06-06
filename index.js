@@ -14,7 +14,7 @@ class Index {
     SecondMethodFilterRecipesMainSearch.filterRecipesByInput(recipesDataFilter);
   }
 
-  // CREATE INGREDIENTS DROPDOWN
+  // CREATE INGREDIENTS TAG
   async ingredients() {
     let List1 = document.querySelectorAll("#List1 li");
     List1.forEach((item) => {
@@ -28,7 +28,7 @@ class Index {
     SecondMethodFilterRecipesMainSearch.DropdownIngredients(this.recipesData);
   }
 
-  // CREATE APPLIANCE DROPDOWN
+  // CREATE APPLIANCE TAG
   async appliance() {
     let List2 = document.querySelectorAll("#List2 li");
     List2.forEach((item) => {
@@ -41,7 +41,7 @@ class Index {
     SecondMethodFilterRecipesMainSearch.DropdownAppliances(this.recipesData);
   }
 
-  // CREATE USTENSILS DROPDOWN
+  // CREATE USTENSILS TAG
   async ustensils() {
     let List3 = document.querySelectorAll("#List3 li");
     List3.forEach((item) => {
@@ -62,8 +62,8 @@ class Index {
 
   // GET RECIPES
   async recipes() {
-    // FilterRecipesMainSearch.displayRecipes(this.recipesData);
-    SecondMethodFilterRecipesMainSearch.displayRecipes(this.recipesData);
+    FilterRecipesMainSearch.displayRecipes(this.recipesData);
+    // SecondMethodFilterRecipesMainSearch.displayRecipes(this.recipesData);
   }
 
   async init() {

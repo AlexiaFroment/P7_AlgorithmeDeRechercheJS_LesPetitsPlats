@@ -180,7 +180,7 @@
         "unit": "grammes"
       },
       {
-        "ingredient": "Moutarde de Dijon",
+        "ingredient": "Moutarde de dijon",
         "quantity": 1,
         "unite": "cuillères à soupe"
       }
@@ -488,7 +488,7 @@
     "servings": 2,
     "ingredients": [
       {
-        "ingredient": "Saucisse bretonne ou de Toulouse",
+        "ingredient": "Saucisse bretonne ou de toulouse",
         "quantity": 2
       },
       {

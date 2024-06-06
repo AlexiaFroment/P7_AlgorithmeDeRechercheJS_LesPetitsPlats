@@ -53,7 +53,6 @@ class TagList {
 
     if (searchInputValue === "") {
       // JE FILTRE SUR LE CALL API RECIPEDATA
-      console.log("vide");
       if (result.length === 0) {
         SecondMethodFilterRecipesMainSearch.displayRecipes(recipeData);
         SecondMethodFilterRecipesMainSearch.updateAllDropdowns(recipeData);
@@ -92,7 +91,13 @@ class TagList {
     } else {
       // JE FILTRE SUR RECIPE
       if (result.length === 0) {
-        console.log(searchInputValue);
+        // console.log(searchInputValue);
+        // const originalArr = FilterRecipesMainSearch.filterRecipesManually(
+        //   recipeData,
+        //   searchInputValue
+        // );
+        // FilterRecipesMainSearch.displayRecipes(originalArr);
+        // FilterRecipesMainSearch.updateAllDropdowns(originalArr);
         const originalArr =
           SecondMethodFilterRecipesMainSearch.filterRecipesManually(
             recipeData,
@@ -100,9 +105,11 @@ class TagList {
           );
         SecondMethodFilterRecipesMainSearch.displayRecipes(originalArr);
         SecondMethodFilterRecipesMainSearch.updateAllDropdowns(originalArr);
-        // FilterRecipesMainSearch.displayRecipes(recipeData);
-        // FilterRecipesMainSearch.updateAllDropdowns(recipeData);
       } else {
+        // let filteredRecipes = FilterRecipesMainSearch.filterRecipesManually(
+        //   recipeData,
+        //   searchInputValue
+        // );
         let filteredRecipes =
           SecondMethodFilterRecipesMainSearch.filterRecipesManually(
             recipeData,
@@ -185,6 +192,8 @@ class TagList {
     const value =
       eventOrValue instanceof Event ? eventOrValue.target : eventOrValue;
     const valueId = value.id;
+
+    console.log(valueId);
 
     const tagExists = this.checkValueExists(valueId, type);
     if (!tagExists) {
